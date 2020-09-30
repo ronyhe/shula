@@ -14,7 +14,7 @@ jobs:
           node-version: '12'
       - run: yarn
       - run: yarn make
-      - name: Upload math result for job 2
+      - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: executables
