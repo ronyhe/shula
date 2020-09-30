@@ -1,0 +1,22 @@
+name: Make-Executables
+
+on: workflow_dispatch
+
+jobs:
+  make-executable:
+    name: Make Executables
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+          with:
+            node-version: '12'
+            check-latest: true
+      - run: yarn
+      - run: yarn make
+      - name: Upload math result for job 2
+        uses: actions/upload-artifact@v2
+          with:
+            name: executables
+            path: out/make
