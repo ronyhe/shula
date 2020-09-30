@@ -8,7 +8,7 @@ In fact the goal is a bit more ambitious:
 Become the first official minesweeper that is both cross platform and open source.
 Another, more minor goal is having accessible code.
 This will aid in finding and removing exploits and will help the minesweeper community make informed decisions.
-This goal is basically a requirement for being open source software, but it's worth mentioning anyway in this case.
+This goal is basically a requirement for being open source software, but it's worth mentioning anyway.
 
 ## Technology
 
