@@ -4,8 +4,11 @@ on: workflow_dispatch
 
 jobs:
   make-executable:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     name: Make Executables
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -17,5 +20,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: executables
+          name: executables-${{ matrix.os }}
           path: out/make
