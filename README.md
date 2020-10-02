@@ -22,8 +22,7 @@ The first word is spelled the same as the common Hebrew name, Shula, which is ho
 Hebrew speakers refer to the game.
 
 ## Immediate steps
-Setup formatting and linting
-Setup automatic cross platform build and release flow (probably using github actions) 
+- Setup formatting and linting
 
 ## Next steps
 - Setup a first working game
