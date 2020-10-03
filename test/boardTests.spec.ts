@@ -68,4 +68,11 @@ describe('createBoard', () => {
             )
         })
     })
+
+    describe.skip('exposing', () => {
+        it('fails on flagged cells')
+        it('exposes the specified cell')
+        it('exposes surrounding zero cells')
+        it('exposes surrounding zero cells recursively')
+    })
 })
