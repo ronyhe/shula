@@ -1,3 +1,5 @@
+import { adjust, update } from 'ramda'
+
 interface Coordinate {
     readonly x: number
     readonly y: number
@@ -35,6 +37,11 @@ function get<T>(coordinate: Coordinate, grid: Grid<T>): T {
     validateCoordinate(coordinate, grid)
     const { x, y } = coordinate
     return grid[y][x]
+}
+
+function set<T>(coordinate: Coordinate, t: T, grid: Grid<T>): Grid<T> {
+    const { x, y } = coordinate
+    return adjust(y, update(x, t), grid)
 }
 
 function getNeighborCoordinates<T>(
@@ -85,6 +92,7 @@ export {
     Coordinate,
     Grid,
     get,
+    set,
     getNeighborCoordinates,
     map,
     width,

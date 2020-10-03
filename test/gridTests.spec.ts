@@ -5,7 +5,8 @@ import {
     getNeighborCoordinates,
     isValidCoordinate,
     validateCoordinate,
-    map
+    map,
+    set
 } from '../src/Grid'
 
 describe('Grid', () => {
@@ -104,5 +105,13 @@ describe('Grid', () => {
             return coordinate
         }, grid)
         expect(mapped).toEqual(grid)
+    })
+
+    it('sets correctly', () => {
+        const coordinate = { x: 2, y: 2 }
+        const value = { x: 0, y: 0 }
+        const newGrid = set(coordinate, value, grid)
+        const cell = get(coordinate, newGrid)
+        expect(cell).toEqual(value)
     })
 })
