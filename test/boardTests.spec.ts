@@ -1,6 +1,15 @@
-import { includes, prop } from 'ramda'
-import { Cell, createBoard } from '../src/Board'
-import { height, width, forEach, Coordinate, Grid, map } from '../src/Grid'
+import { assoc, includes, prop } from 'ramda'
+import { Cell, createBoard, flag } from '../src/Board'
+import {
+    height,
+    width,
+    forEach,
+    Coordinate,
+    Grid,
+    map,
+    get,
+    update
+} from '../src/Grid'
 
 describe('createBoard', () => {
     // Test board:
@@ -41,5 +50,22 @@ describe('createBoard', () => {
             [0, 1, 1],
             [0, 0, 0]
         ])
+    })
+
+    describe('flagging', () => {
+        const coordinate = { x: 0, y: 0 }
+
+        it('works for unexposed cells', () => {
+            const newBoard = flag(coordinate, board)
+            const cell = get(coordinate, newBoard)
+            expect(cell.flagged).toBe(true)
+        })
+
+        it('throws for exposed cells', () => {
+            const newBoard = update(coordinate, assoc('exposed', true), board)
+            expect(() => flag(coordinate, newBoard)).toThrow(
+                'Cannot flag exposed cell at'
+            )
+        })
     })
 })

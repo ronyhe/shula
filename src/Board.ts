@@ -1,5 +1,12 @@
 import { assoc, filter, includes, length, prop, range } from 'ramda'
-import { Coordinate, get, getNeighborCoordinates, Grid, map } from './Grid'
+import {
+    Coordinate,
+    get,
+    getNeighborCoordinates,
+    Grid,
+    map,
+    update
+} from './Grid'
 
 interface Cell {
     readonly flagged: boolean
@@ -62,4 +69,12 @@ function createBoard(
     return setAdjacentMines(boardWithMines)
 }
 
-export { createBoard, Cell, Board }
+function flag(coordinate: Coordinate, board: Board): Board {
+    const cell = get(coordinate, board)
+    if (cell.exposed) {
+        throw new Error(`Cannot flag exposed cell at ${coordinate}`)
+    }
+    return update(coordinate, assoc('flagged', true), board)
+}
+
+export { createBoard, flag, Cell, Board }
