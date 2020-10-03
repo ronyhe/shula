@@ -11,6 +11,7 @@ interface Grid<T> {
     get(coordinate: Coordinate): T
     getNeighborCoordinates(coordinate: Coordinate): ReadonlyArray<Coordinate>
     map<A>(f: (t: T, coordinate: Coordinate) => A): Grid<A>
+    toRows(): Rows<T>
 }
 
 class GridImpl<T> implements Grid<T> {
@@ -77,6 +78,10 @@ class GridImpl<T> implements Grid<T> {
                 )
             )
         )
+    }
+
+    toRows(): Rows<T> {
+        return this.items
     }
 }
 

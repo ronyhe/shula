@@ -74,4 +74,14 @@ describe('Grid', () => {
             ])
         })
     })
+
+    describe('.map', () => {
+        it('maps correctly', () => {
+            const mapped = grid.map((value, coordinate) => {
+                expect(value).toEqual(coordinate)
+                return coordinate
+            })
+            expect(mapped.toRows()).toEqual(rows)
+        })
+    })
 })
