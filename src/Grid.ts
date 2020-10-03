@@ -84,4 +84,4 @@ function createGrid<T>(items: Rows<T>): Grid<T> {
     return new GridImpl(items)
 }
 
-export { Grid, createGrid }
+export { Grid, Rows, Coordinate, createGrid }
