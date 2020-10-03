@@ -1,5 +1,6 @@
-import { createBoard } from '../src/Board'
-import { height, width } from '../src/Grid'
+import { includes } from 'ramda'
+import { Cell, createBoard } from '../src/Board'
+import { height, width, forEach, Coordinate } from '../src/Grid'
 
 describe('createBoard', () => {
     const minePositions = [
@@ -14,5 +15,13 @@ describe('createBoard', () => {
         expect(width(board)).toBe(3)
     })
 
-    it('has mines in a all the specified positions, and only in those positions', () => {})
+    it('has mines in a all the specified positions, and only in those positions', () => {
+        const positionShouldHaveMine = (c: Coordinate) =>
+            includes(c, minePositions)
+
+        forEach((cell: Cell, coordinate: Coordinate): void => {
+            const expectMine = positionShouldHaveMine(coordinate)
+            expect(cell.isMine).toBe(expectMine)
+        }, board)
+    })
 })

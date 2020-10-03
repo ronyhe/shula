@@ -72,6 +72,15 @@ function map<T, A>(
     )
 }
 
+function forEach<T>(
+    f: (t: T, coordinate: Coordinate) => void,
+    grid: Grid<T>
+): void {
+    grid.forEach((row, rowIndex) =>
+        row.forEach((cell, cellIndex) => f(cell, { x: cellIndex, y: rowIndex }))
+    )
+}
+
 export {
     Coordinate,
     Grid,
@@ -81,5 +90,6 @@ export {
     width,
     height,
     isValidCoordinate,
-    validateCoordinate
+    validateCoordinate,
+    forEach
 }
