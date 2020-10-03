@@ -1,5 +1,5 @@
-import { includes, range } from 'ramda'
-import { Coordinate, Grid, map } from './Grid'
+import { assoc, filter, includes, length, prop, range } from 'ramda'
+import { Coordinate, get, getNeighborCoordinates, Grid, map } from './Grid'
 
 interface Cell {
     readonly flagged: boolean
@@ -30,6 +30,27 @@ function setMines(
     }, board)
 }
 
+function countAdjacentMines(coordinate: Coordinate, boardWithMines: Board) {
+    const adjacentCoordinates = getNeighborCoordinates(
+        coordinate,
+        boardWithMines
+    )
+    const adjacentCells = adjacentCoordinates.map(coordinate =>
+        get(coordinate, boardWithMines)
+    )
+    const mines = filter(prop('isMine'), adjacentCells)
+    return length(mines)
+}
+
+function setAdjacentMines(boardWithMines: Board): Board {
+    const count = (coordinate: Coordinate) =>
+        countAdjacentMines(coordinate, boardWithMines)
+    return map(
+        (cell, coordinate) => assoc('adjacentMines', count(coordinate), cell),
+        boardWithMines
+    )
+}
+
 function createBoard(
     width: number,
     height: number,
@@ -37,7 +58,8 @@ function createBoard(
 ): Board {
     const row = range(0, width).map(() => DefaultCell)
     const blankBoard = range(0, height).map(() => row)
-    return setMines(minePositions, blankBoard)
+    const boardWithMines = setMines(minePositions, blankBoard)
+    return setAdjacentMines(boardWithMines)
 }
 
 export { createBoard, Cell, Board }
