@@ -65,5 +65,13 @@ describe('Grid', () => {
                 { x: 2, y: 2 }
             ])
         })
+
+        it('returns correct coordinates for corner cells', () => {
+            expect(grid.getNeighborCoordinates({ x: 0, y: 0 })).toEqual([
+                { x: 1, y: 0 },
+                { x: 0, y: 1 },
+                { x: 1, y: 1 }
+            ])
+        })
     })
 })
