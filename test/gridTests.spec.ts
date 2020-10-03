@@ -6,7 +6,8 @@ import {
     isValidCoordinate,
     validateCoordinate,
     map,
-    set
+    set,
+    update
 } from '../src/Grid'
 
 describe('Grid', () => {
@@ -107,11 +108,20 @@ describe('Grid', () => {
         expect(mapped).toEqual(grid)
     })
 
-    it('sets correctly', () => {
+    describe('sets and update', () => {
         const coordinate = { x: 2, y: 2 }
         const value = { x: 0, y: 0 }
-        const newGrid = set(coordinate, value, grid)
-        const cell = get(coordinate, newGrid)
-        expect(cell).toEqual(value)
+
+        it('sets correctly', () => {
+            const newGrid = set(coordinate, value, grid)
+            const cell = get(coordinate, newGrid)
+            expect(cell).toEqual(value)
+        })
+
+        it('updates correctly', () => {
+            const newGrid = update(coordinate, () => value, grid)
+            const cell = get(coordinate, newGrid)
+            expect(cell).toEqual(value)
+        })
     })
 })

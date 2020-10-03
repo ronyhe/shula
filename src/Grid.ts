@@ -1,4 +1,4 @@
-import { adjust, update } from 'ramda'
+import { adjust, update as ramdaUpdate } from 'ramda'
 
 interface Coordinate {
     readonly x: number
@@ -41,7 +41,16 @@ function get<T>(coordinate: Coordinate, grid: Grid<T>): T {
 
 function set<T>(coordinate: Coordinate, t: T, grid: Grid<T>): Grid<T> {
     const { x, y } = coordinate
-    return adjust(y, update(x, t), grid)
+    return adjust(y, ramdaUpdate(x, t), grid)
+}
+
+function update<T>(
+    coordinate: Coordinate,
+    f: (t: T) => T,
+    grid: Grid<T>
+): Grid<T> {
+    const oldValue = get(coordinate, grid)
+    return set(coordinate, f(oldValue), grid)
 }
 
 function getNeighborCoordinates<T>(
@@ -93,6 +102,7 @@ export {
     Grid,
     get,
     set,
+    update,
     getNeighborCoordinates,
     map,
     width,
