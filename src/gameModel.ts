@@ -1,31 +1,33 @@
-interface Coordinate {
-    x: number
-    y: number
+import { Coordinate, Rows } from './Grid'
+
+interface CellDescription {
+    readonly isMine: boolean
+    readonly adjacentMines: number
 }
 
-export interface Cell {
-    isMine: boolean
-    adjacentMines: number
+interface BoardDescription extends BoardAttributes {
+    readonly width: number
+    readonly height: number
+    readonly mines: number
+    readonly cells: Rows<CellDescription>
 }
 
-type Row = ReadonlyArray<Cell>
-
-interface BoardDescription {
-    width: number
-    height: number
-    cells: ReadonlyArray<Row>
+interface Cell extends CellDescription {
+    readonly flagged: boolean
+    readonly exposed: boolean
 }
 
-interface GameCell extends Cell {
-    flagged: boolean
-    exposed: boolean
-}
-
-interface GameBoard {
-    exploded: boolean
-    finished: boolean
-    get(coordinate: Coordinate): GameCell
-    flag(coordinate: Coordinate): GameBoard
-    expose(coordinate: Coordinate): GameBoard
+interface Board {
+    readonly exploded: boolean
+    readonly finished: boolean
+    get(coordinate: Coordinate): Cell
+    flag(coordinate: Coordinate): Board
+    expose(coordinate: Coordinate): Board
     getNeighborCoordinates(coordinate: Coordinate): ReadonlyArray<Coordinate>
+}
+
+interface BoardAttributes {
+    readonly width: number
+    readonly height: number
+    readonly mines: number
 }
