@@ -1,4 +1,4 @@
-import { assoc, filter, includes, length, prop, range } from 'ramda'
+import { assoc, filter, includes, length, prop, range, reduce } from 'ramda'
 import {
     Coordinate,
     get,
@@ -77,4 +77,28 @@ function flag(coordinate: Coordinate, board: Board): Board {
     return update(coordinate, assoc('flagged', true), board)
 }
 
-export { createBoard, flag, Cell, Board }
+function expose(coordinate: Coordinate, board: Board): Board {
+    const cell = get(coordinate, board)
+    if (cell.exposed) {
+        return board
+    }
+    if (cell.flagged) {
+        throw new Error(`Cannot expose flagged cell at ${coordinate}`)
+    }
+    const boardWithExposedCell = update(
+        coordinate,
+        assoc('exposed', true),
+        board
+    )
+    const moreCellsToExpose =
+        cell.adjacentMines === 0
+            ? getNeighborCoordinates(coordinate, boardWithExposedCell)
+            : []
+    return reduce(
+        (acc, coordinate) => expose(coordinate, acc),
+        boardWithExposedCell,
+        moreCellsToExpose
+    )
+}
+
+export { createBoard, flag, expose, Cell, Board }

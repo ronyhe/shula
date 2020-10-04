@@ -1,5 +1,5 @@
 import { assoc, includes, prop } from 'ramda'
-import { Cell, createBoard, flag } from '../src/Board'
+import { Cell, createBoard, flag, expose } from '../src/Board'
 import {
     height,
     width,
@@ -69,10 +69,39 @@ describe('createBoard', () => {
         })
     })
 
-    describe.skip('exposing', () => {
-        it('fails on flagged cells')
-        it('exposes the specified cell')
-        it('exposes surrounding zero cells')
-        it('exposes surrounding zero cells recursively')
+    describe('exposing', () => {
+        const coordinate = { x: 0, y: 0 }
+        it('fails on flagged cells', () => {
+            const newBoard = update(coordinate, assoc('flagged', true), board)
+            expect(() => expose(coordinate, newBoard)).toThrow(
+                'Cannot expose flagged cell at'
+            )
+        })
+        it('exposes the specified cell', () => {
+            const newBoard = expose(coordinate, board)
+            expect(get(coordinate, newBoard).exposed).toBe(true)
+        })
+        it('exposes the surrounding area if it is a zero', () => {
+            const newBoard = expose({ x: 0, y: 4 }, board)
+            const coordinatesThatShouldBeExposed = [
+                { x: 0, y: 2 },
+                { x: 0, y: 3 },
+                { x: 0, y: 4 },
+
+                { x: 1, y: 2 },
+                { x: 1, y: 3 },
+                { x: 1, y: 4 },
+
+                { x: 2, y: 3 },
+                { x: 2, y: 4 }
+            ]
+            forEach(({ exposed }, coordinate) => {
+                const shouldBeExposed = includes(
+                    coordinate,
+                    coordinatesThatShouldBeExposed
+                )
+                expect(exposed).toBe(shouldBeExposed)
+            }, newBoard)
+        })
     })
 })
