@@ -119,4 +119,8 @@ function isExploded(board: Board): boolean {
     return any(explodedCell, cells)
 }
 
-export { createBoard, flag, expose, isExploded, Cell, Board }
+function isSolved(board: Board): boolean {
+    throw new Error()
+}
+
+export { createBoard, flag, expose, isExploded, isSolved, Cell, Board }

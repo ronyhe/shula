@@ -1,5 +1,23 @@
-import { assoc, includes, prop } from 'ramda'
-import { Cell, createBoard, flag, expose, isExploded } from '../src/Board'
+import {
+    assoc,
+    filter,
+    includes,
+    prop,
+    length,
+    reduce,
+    take,
+    path,
+    map as ramdaMap
+} from 'ramda'
+import {
+    Cell,
+    createBoard,
+    flag,
+    expose,
+    isExploded,
+    isSolved,
+    Board
+} from '../src/Board'
 import {
     height,
     width,
@@ -8,7 +26,12 @@ import {
     Grid,
     map,
     get,
-    update
+    update,
+    values,
+    coordinates,
+    CoordinateValue,
+    valuesAndCoordinates,
+    CoordinateValues
 } from '../src/Grid'
 
 describe('createBoard', () => {
@@ -114,6 +137,50 @@ describe('createBoard', () => {
 
         it('returns true if some flags are exposed', () => {
             expect(isExploded(expose({ x: 0, y: 0 }, board))).toBe(true)
+        })
+    })
+
+    describe('isSolved', () => {
+        describe('incorrect flag amount', () => {
+            const mineCount = length(filter(prop('isMine'), values(board)))
+            const flagCells: (n: number) => Board = n =>
+                reduce(
+                    (acc, coordinate) => flag(coordinate, acc),
+                    board,
+                    take(n, coordinates(board))
+                )
+
+            it('returns false if a there are more flags than mines', () => {
+                expect(isSolved(flagCells(mineCount + 1))).toBe(false)
+            })
+
+            it('returns false there are less flags than mines', () => {
+                expect(isSolved(flagCells(mineCount - 1))).toBe(false)
+            })
+        })
+
+        it('returns false if the board is exploded', () => {
+            expect(isSolved(expose({ x: 0, y: 0 }, board))).toBe(true)
+        })
+
+        it('returns true if exactly the amount of mines is flagged, and each flag is correct', () => {
+            const gridValues: CoordinateValues<Cell> = valuesAndCoordinates(
+                board
+            )
+            const mines: CoordinateValues<Cell> = filter(
+                path(['value', 'isMine']),
+                gridValues
+            )
+            const mineCoordinates: ReadonlyArray<Coordinate> = ramdaMap(
+                prop('coordinate'),
+                mines
+            )
+            const flaggedBoard = reduce(
+                (acc, coordinate) => flag(coordinate, acc),
+                board,
+                mineCoordinates
+            )
+            expect(isSolved(flaggedBoard)).toBe(true)
         })
     })
 })

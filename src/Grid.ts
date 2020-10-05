@@ -3,7 +3,8 @@ import {
     chain,
     identity,
     update as ramdaUpdate,
-    map as ramdaMap
+    map as ramdaMap,
+    range
 } from 'ramda'
 
 interface Coordinate {
@@ -12,6 +13,13 @@ interface Coordinate {
 }
 
 type Grid<T> = ReadonlyArray<ReadonlyArray<T>>
+
+interface CoordinateValue<T> {
+    readonly value: T
+    readonly coordinate: Coordinate
+}
+
+type CoordinateValues<T> = ReadonlyArray<CoordinateValue<T>>
 
 function height<T>(grid: Grid<T>): number {
     return grid.length
@@ -107,8 +115,26 @@ function values<T>(grid: Grid<T>): ReadonlyArray<T> {
     return chain(ramdaMap(identity), grid)
 }
 
+function coordinates<T>(grid: Grid<T>): ReadonlyArray<Coordinate> {
+    const w = range(0, width(grid))
+    const h = range(0, height(grid))
+    return chain(row => ramdaMap(col => ({ x: col, y: row }), w), h)
+}
+
+function valuesAndCoordinates<T>(grid: Grid<T>): CoordinateValues<T> {
+    return ramdaMap(
+        coordinate => ({
+            value: get(coordinate, grid),
+            coordinate
+        }),
+        coordinates(grid)
+    )
+}
+
 export {
     Coordinate,
+    CoordinateValue,
+    CoordinateValues,
     Grid,
     get,
     set,
@@ -120,5 +146,7 @@ export {
     isValidCoordinate,
     validateCoordinate,
     forEach,
-    values
+    values,
+    coordinates,
+    valuesAndCoordinates
 }
