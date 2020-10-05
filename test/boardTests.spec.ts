@@ -1,5 +1,5 @@
 import { assoc, includes, prop } from 'ramda'
-import { Cell, createBoard, flag, expose } from '../src/Board'
+import { Cell, createBoard, flag, expose, isExploded } from '../src/Board'
 import {
     height,
     width,
@@ -77,10 +77,12 @@ describe('createBoard', () => {
                 'Cannot expose flagged cell at'
             )
         })
+
         it('exposes the specified cell', () => {
             const newBoard = expose(coordinate, board)
             expect(get(coordinate, newBoard).exposed).toBe(true)
         })
+
         it('exposes the surrounding area if it is a zero', () => {
             const newBoard = expose({ x: 0, y: 4 }, board)
             const coordinatesThatShouldBeExposed = [
@@ -102,6 +104,16 @@ describe('createBoard', () => {
                 )
                 expect(exposed).toBe(shouldBeExposed)
             }, newBoard)
+        })
+    })
+
+    describe('isExploded', () => {
+        it('returns false if no flags are exposed', () => {
+            expect(isExploded(board)).toBe(false)
+        })
+
+        it('returns true if some flags are exposed', () => {
+            expect(isExploded(expose({ x: 0, y: 0 }, board))).toBe(true)
         })
     })
 })

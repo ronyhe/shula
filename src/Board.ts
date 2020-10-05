@@ -1,11 +1,22 @@
-import { assoc, filter, includes, length, prop, range, reduce } from 'ramda'
+import {
+    assoc,
+    filter,
+    includes,
+    length,
+    prop,
+    range,
+    reduce,
+    any,
+    both
+} from 'ramda'
 import {
     Coordinate,
     get,
     getNeighborCoordinates,
     Grid,
     map,
-    update
+    update,
+    values
 } from './Grid'
 
 interface Cell {
@@ -101,4 +112,11 @@ function expose(coordinate: Coordinate, board: Board): Board {
     )
 }
 
-export { createBoard, flag, expose, Cell, Board }
+const explodedCell = both(prop('isMine'), prop('exposed'))
+
+function isExploded(board: Board): boolean {
+    const cells = values(board)
+    return any(explodedCell, cells)
+}
+
+export { createBoard, flag, expose, isExploded, Cell, Board }
