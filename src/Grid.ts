@@ -1,4 +1,10 @@
-import { adjust, update as ramdaUpdate } from 'ramda'
+import {
+    adjust,
+    chain,
+    identity,
+    update as ramdaUpdate,
+    map as ramdaMap
+} from 'ramda'
 
 interface Coordinate {
     readonly x: number
@@ -97,6 +103,10 @@ function forEach<T>(
     )
 }
 
+function values<T>(grid: Grid<T>): ReadonlyArray<T> {
+    return chain(ramdaMap(identity), grid)
+}
+
 export {
     Coordinate,
     Grid,
@@ -109,5 +119,6 @@ export {
     height,
     isValidCoordinate,
     validateCoordinate,
-    forEach
+    forEach,
+    values
 }

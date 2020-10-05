@@ -7,8 +7,10 @@ import {
     validateCoordinate,
     map,
     set,
-    update
+    update,
+    values
 } from '../src/Grid'
+import { unnest } from 'ramda'
 
 describe('Grid', () => {
     const grid: Grid<Coordinate> = [
@@ -108,7 +110,11 @@ describe('Grid', () => {
         expect(mapped).toEqual(grid)
     })
 
-    describe('sets and update', () => {
+    it('returns values', () => {
+        expect(values(grid)).toEqual(unnest(grid))
+    })
+
+    describe('sets and updates', () => {
         const coordinate = { x: 2, y: 2 }
         const value = { x: 0, y: 0 }
 
