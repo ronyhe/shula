@@ -154,7 +154,7 @@ describe('createBoard', () => {
                 expect(isSolved(flagCells(mineCount + 1))).toBe(false)
             })
 
-            it('returns false there are less flags than mines', () => {
+            it('returns false if there are less flags than mines', () => {
                 expect(isSolved(flagCells(mineCount - 1))).toBe(false)
             })
         })
