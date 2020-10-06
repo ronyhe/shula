@@ -160,7 +160,9 @@ describe('createBoard', () => {
         })
 
         it('returns false if the board is exploded', () => {
-            expect(isSolved(expose({ x: 0, y: 0 }, board))).toBe(true)
+            const exposed = expose({ x: 0, y: 0 }, board)
+            expect(isExploded(exposed)).toBe(true)
+            expect(isSolved(exposed)).toBe(false)
         })
 
         it('returns true if exactly the amount of mines is flagged, and each flag is correct', () => {

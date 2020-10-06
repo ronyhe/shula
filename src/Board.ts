@@ -7,7 +7,8 @@ import {
     range,
     reduce,
     any,
-    both
+    both,
+    all
 } from 'ramda'
 import {
     Coordinate,
@@ -120,7 +121,13 @@ function isExploded(board: Board): boolean {
 }
 
 function isSolved(board: Board): boolean {
-    throw new Error()
+    const cellIsCorrect: (c: Cell) => boolean = cell => {
+        if (cell.isMine) {
+            return cell.flagged && !cell.exposed
+        }
+        return !cell.flagged
+    }
+    return all(cellIsCorrect, values(board))
 }
 
 export { createBoard, flag, expose, isExploded, isSolved, Cell, Board }
