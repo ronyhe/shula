@@ -8,4 +8,6 @@ function getRandomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min) + min)
 }
 
-export { getRandomInt }
+type Consumer<T> = (t: T) => void
+
+export { getRandomInt, Consumer }
