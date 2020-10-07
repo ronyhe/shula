@@ -20,5 +20,8 @@
           "extensions": [".js", ".jsx", ".ts", ".tsx"]
         }
       }
-    }
+    },
+  "rules": {
+    "react/prop-types": 0
+  }
 }

@@ -29,7 +29,6 @@ import {
     update,
     values,
     coordinates,
-    CoordinateValue,
     valuesAndCoordinates,
     CoordinateValues
 } from '../src/Grid'

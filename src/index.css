@@ -4,3 +4,15 @@ body {
   max-width: 38rem;
   padding: 2rem;
 }
+
+.board-table {
+  background-color: lightgray;
+}
+
+.board-row {}
+
+.board-cell {
+  width: 14px;
+  height: 14px;
+  border: 1px solid black;
+}
