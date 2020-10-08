@@ -1,3 +1,19 @@
+/*
+ press-start-2p-regular - latin
+ Generated with the help of https://google-webfonts-helper.herokuapp.com/
+ This font is under the SIL open font license (https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)
+ It was taken from https://fonts.google.com/specimen/Press+Start+2P
+ Using this font was inspired by this github project: https://github.com/AlexAegis/svelte-minesweeper
+ */
+@font-face {
+  font-family: 'Press Start 2P';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Press Start 2P Regular'), local('PressStart2P-Regular'),
+  url('../assets/fonts/press-start-2p-v9-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+  url('../assets/fonts/press-start-2p-v9-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin: auto;
@@ -15,6 +31,7 @@ body {
   width: 14px;
   height: 14px;
   border: 1px solid black;
+  font-family: "Press Start 2P", cursive;
   font-size: 10px;
   text-align: center;
 }
