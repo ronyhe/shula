@@ -83,21 +83,17 @@ describe('createBoard', () => {
             expect(cell.flagged).toBe(true)
         })
 
-        it('throws for exposed cells', () => {
+        it('ignores for exposed cells', () => {
             const newBoard = update(coordinate, assoc('exposed', true), board)
-            expect(() => flag(coordinate, newBoard)).toThrow(
-                'Cannot flag exposed cell at'
-            )
+            expect(flag(coordinate, newBoard)).toEqual(newBoard)
         })
     })
 
     describe('exposing', () => {
         const coordinate = { x: 0, y: 0 }
-        it('fails on flagged cells', () => {
+        it('ignores for flagged cells', () => {
             const newBoard = update(coordinate, assoc('flagged', true), board)
-            expect(() => expose(coordinate, newBoard)).toThrow(
-                'Cannot expose flagged cell at'
-            )
+            expect(expose(coordinate, newBoard)).toEqual(newBoard)
         })
 
         it('exposes the specified cell', () => {

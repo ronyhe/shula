@@ -84,18 +84,15 @@ function createBoard(
 function flag(coordinate: Coordinate, board: Board): Board {
     const cell = get(coordinate, board)
     if (cell.exposed) {
-        throw new Error(`Cannot flag exposed cell at ${coordinate}`)
+        return board
     }
     return update(coordinate, assoc('flagged', true), board)
 }
 
 function expose(coordinate: Coordinate, board: Board): Board {
     const cell = get(coordinate, board)
-    if (cell.exposed) {
+    if (cell.exposed || cell.flagged) {
         return board
-    }
-    if (cell.flagged) {
-        throw new Error(`Cannot expose flagged cell at ${coordinate}`)
     }
     const boardWithExposedCell = update(
         coordinate,
