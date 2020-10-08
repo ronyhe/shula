@@ -10,10 +10,12 @@ import {
     both,
     all,
     partition,
-    path
+    path,
+    map as ramdaMap
 } from 'ramda'
 import {
     Coordinate,
+    CoordinateValues,
     get,
     getNeighborCoordinates,
     getNeighborValuesAndCoordinates,
@@ -106,14 +108,13 @@ function expose(coordinate: Coordinate, board: Board): Board {
         cell.adjacentMines === 0
             ? getNeighborCoordinates(coordinate, boardWithExposedCell)
             : []
-    return reduce(
-        (acc, coordinate) => expose(coordinate, acc),
-        boardWithExposedCell,
-        moreCellsToExpose
-    )
+    return repeat(expose, moreCellsToExpose, boardWithExposedCell)
 }
 
-const explodedCell = both(prop('isMine'), prop('exposed'))
+const explodedCell: (cell: Cell) => boolean = both(
+    prop('isMine'),
+    prop('exposed')
+)
 
 function isExploded(board: Board): boolean {
     const cells = values(board)
@@ -139,21 +140,33 @@ function exposeNeighbors(coordinate: Coordinate, board: Board): Board {
     if (!cell.exposed || cell.flagged || cell.isMine) {
         return board
     }
+
     const adjacentValuesAndCoordinate = getNeighborValuesAndCoordinates(
         coordinate,
         board
     )
-    const [flagged, notFlagged] = partition(
-        path(['value', 'flagged']),
-        adjacentValuesAndCoordinate
-    )
+    const [flagged, notFlagged]: [
+        CoordinateValues<Cell>,
+        CoordinateValues<Cell>
+    ] = partition(path(['value', 'flagged']), adjacentValuesAndCoordinate)
+
     if (length(flagged) !== cell.adjacentMines) {
         return board
     }
+
+    const coordinatesToExpose = ramdaMap(prop('coordinate'), notFlagged)
+    return repeat(expose, coordinatesToExpose, board)
+}
+
+function repeat(
+    action: (coordinate: Coordinate, board: Board) => Board,
+    coordinates: ReadonlyArray<Coordinate>,
+    board: Board
+): Board {
     return reduce(
-        (acc, { coordinate }) => expose(coordinate, acc),
+        (acc, coordinate) => action(coordinate, acc),
         board,
-        notFlagged
+        coordinates
     )
 }
 
@@ -164,6 +177,7 @@ export {
     expose,
     isExploded,
     isSolved,
+    repeat,
     Cell,
     Board
 }

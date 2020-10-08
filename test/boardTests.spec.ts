@@ -4,7 +4,6 @@ import {
     includes,
     prop,
     length,
-    reduce,
     take,
     path,
     map as ramdaMap,
@@ -18,7 +17,8 @@ import {
     isExploded,
     isSolved,
     Board,
-    exposeNeighbors
+    exposeNeighbors,
+    repeat
 } from '../src/Board'
 import {
     height,
@@ -165,11 +165,7 @@ describe('createBoard', () => {
             ]
 
             it('exposes all unexposed non flagged neighboring cells', () => {
-                const flagged = reduce(
-                    (acc, coordinate) => flag(coordinate, acc),
-                    boardWithNumberExposed,
-                    mines
-                )
+                const flagged = repeat(flag, mines, boardWithNumberExposed)
                 const exposed = exposeNeighbors(coordinate, flagged)
                 const shouldBeExposed = [
                     { x: 2, y: 0 },
@@ -211,11 +207,7 @@ describe('createBoard', () => {
         describe('incorrect flag amount', () => {
             const mineCount = length(filter(prop('isMine'), values(board)))
             const flagCells: (n: number) => Board = n =>
-                reduce(
-                    (acc, coordinate) => flag(coordinate, acc),
-                    board,
-                    take(n, coordinates(board))
-                )
+                repeat(flag, take(n, coordinates(board)), board)
 
             it('returns false if a there are more flags than mines', () => {
                 expect(isSolved(flagCells(mineCount + 1))).toBe(false)
@@ -244,11 +236,7 @@ describe('createBoard', () => {
                 prop('coordinate'),
                 mines
             )
-            const flaggedBoard = reduce(
-                (acc, coordinate) => flag(coordinate, acc),
-                board,
-                mineCoordinates
-            )
+            const flaggedBoard = repeat(flag, mineCoordinates, board)
             expect(isSolved(flaggedBoard)).toBe(true)
         })
     })
