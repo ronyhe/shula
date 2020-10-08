@@ -7,7 +7,8 @@ import {
     reduce,
     take,
     path,
-    map as ramdaMap
+    map as ramdaMap,
+    range
 } from 'ramda'
 import {
     Cell,
@@ -16,7 +17,8 @@ import {
     expose,
     isExploded,
     isSolved,
-    Board
+    Board,
+    exposeNeighbors
 } from '../src/Board'
 import {
     height,
@@ -122,6 +124,76 @@ describe('createBoard', () => {
                 )
                 expect(exposed).toBe(shouldBeExposed)
             }, newBoard)
+        })
+    })
+
+    describe('exposeNeighbors', () => {
+        describe('ignore scenarios', () => {
+            it('ignores for unexposed cells', () => {
+                expect(exposeNeighbors({ x: 1, y: 0 }, board)).toEqual(board)
+            })
+
+            it('ignores for flagged cells', () => {
+                const coordinate = { x: 0, y: 0 }
+                const flagged = flag(coordinate, board)
+                expect(exposeNeighbors(coordinate, flagged)).toEqual(flagged)
+            })
+
+            it('ignores if not all adjacent mines are flagged', () => {
+                const coordinate = { x: 1, y: 0 }
+                const partiallyFlagged = flag({ x: 0, y: 0 }, board)
+                expect(exposeNeighbors(coordinate, partiallyFlagged)).toEqual(
+                    partiallyFlagged
+                )
+            })
+
+            it('ignores for mines', () => {
+                const coordinate = { x: 0, y: 0 }
+                const exposedMine = expose(coordinate, board)
+                expect(exposeNeighbors(coordinate, exposedMine)).toEqual(
+                    exposedMine
+                )
+            })
+        })
+
+        describe('action scenarios', () => {
+            const coordinate = { x: 1, y: 0 }
+            const boardWithNumberExposed = expose(coordinate, board)
+            const mines = [
+                { x: 0, y: 0 },
+                { x: 1, y: 1 }
+            ]
+
+            it('exposes all unexposed non flagged neighboring cells', () => {
+                const flagged = reduce(
+                    (acc, coordinate) => flag(coordinate, acc),
+                    boardWithNumberExposed,
+                    mines
+                )
+                const exposed = exposeNeighbors(coordinate, flagged)
+                const shouldBeExposed = [
+                    { x: 2, y: 0 },
+                    { x: 2, y: 1 },
+                    { x: 0, y: 1 }
+                ]
+                expect(isExploded(exposed)).toBe(false)
+                shouldBeExposed.forEach(coordinate => {
+                    expect(get(coordinate, exposed).exposed).toBe(true)
+                })
+                mines.forEach(coordinate => {
+                    expect(get(coordinate, exposed).flagged).toBe(true)
+                })
+            })
+
+            it('exposes mines if an incorrect cell is flagged', () => {
+                const correctFlag = flag(mines[0], boardWithNumberExposed)
+                const incorrectFlag = flag({ x: 2, y: 0 }, correctFlag)
+                const exposed = exposeNeighbors(coordinate, incorrectFlag)
+                expect(isExploded(exposed)).toBe(true)
+                range(0, 3).forEach(x => {
+                    expect(get({ x, y: 1 }, exposed).exposed).toBe(true)
+                })
+            })
         })
     })
 

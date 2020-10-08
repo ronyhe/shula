@@ -93,6 +93,16 @@ function getNeighborCoordinates<T>(
     )
 }
 
+function getNeighborValuesAndCoordinates<T>(
+    coordinate: Coordinate,
+    grid: Grid<T>
+): CoordinateValues<T> {
+    return getNeighborCoordinates(coordinate, grid).map(coordinate => ({
+        coordinate,
+        value: get(coordinate, grid)
+    }))
+}
+
 function map<T, A>(
     f: (t: T, coordinate: Coordinate) => A,
     grid: Grid<T>
@@ -140,6 +150,7 @@ export {
     set,
     update,
     getNeighborCoordinates,
+    getNeighborValuesAndCoordinates,
     map,
     width,
     height,

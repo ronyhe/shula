@@ -8,12 +8,15 @@ import {
     reduce,
     any,
     both,
-    all
+    all,
+    partition,
+    path
 } from 'ramda'
 import {
     Coordinate,
     get,
     getNeighborCoordinates,
+    getNeighborValuesAndCoordinates,
     Grid,
     map,
     update,
@@ -127,4 +130,40 @@ function isSolved(board: Board): boolean {
     return all(cellIsCorrect, values(board))
 }
 
-export { createBoard, flag, expose, isExploded, isSolved, Cell, Board }
+/** Expose the neighbors of an exposed cell.
+ * In the classic minesweeper game this happens when clicking a number
+ * with the left and the right mouse buttons at the same time
+ */
+function exposeNeighbors(coordinate: Coordinate, board: Board): Board {
+    const cell = get(coordinate, board)
+    if (!cell.exposed || cell.flagged || cell.isMine) {
+        return board
+    }
+    const adjacentValuesAndCoordinate = getNeighborValuesAndCoordinates(
+        coordinate,
+        board
+    )
+    const [flagged, notFlagged] = partition(
+        path(['value', 'flagged']),
+        adjacentValuesAndCoordinate
+    )
+    if (length(flagged) !== cell.adjacentMines) {
+        return board
+    }
+    return reduce(
+        (acc, { coordinate }) => expose(coordinate, acc),
+        board,
+        notFlagged
+    )
+}
+
+export {
+    createBoard,
+    exposeNeighbors,
+    flag,
+    expose,
+    isExploded,
+    isSolved,
+    Cell,
+    Board
+}
