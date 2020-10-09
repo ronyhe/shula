@@ -21,17 +21,17 @@ body {
   padding: 2rem;
 }
 
-.board-table {
-  background-color: lightgray;
-}
-
-.board-row {}
-
 .board-cell {
   width: 14px;
   height: 14px;
-  border: 1px solid black;
+  border: 1px solid darkgray;
   font-family: "Press Start 2P", cursive;
   font-size: 10px;
   text-align: center;
+  box-shadow: 1px 1px darkgrey;
+  background-color: lightgray;
+}
+
+.board-cell.exposed {
+  box-shadow: inset 1px 1px darkgrey;
 }

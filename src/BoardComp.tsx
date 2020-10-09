@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Board, Cell } from './Board'
 import { Coordinate } from './Grid'
 import { Consumer } from './utils'
+import { append } from 'ramda'
 
 type CoordinateCallback = Consumer<Coordinate>
 
@@ -31,6 +32,19 @@ function cellContent(cell: Cell): string {
     return cell.adjacentMines.toString()
 }
 
+function getCellCssClasses(cell: Cell): ReadonlyArray<string> {
+    const base = ['board-cell']
+    if (cell.exposed) {
+        return append('exposed', base)
+    } else {
+        return base
+    }
+}
+
+function getCellCssClassesString(cell: Cell): string {
+    return getCellCssClasses(cell).join(' ')
+}
+
 function createCell({
     cell,
     coordinate,
@@ -39,7 +53,7 @@ function createCell({
 }: CreateCellParams): React.ReactFragment {
     return (
         <td
-            className="board-cell"
+            className={getCellCssClassesString(cell)}
             key={JSON.stringify(coordinate)}
             onContextMenu={e => {
                 e.preventDefault()
