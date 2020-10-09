@@ -10,12 +10,10 @@ import {
     both,
     all,
     partition,
-    path,
     map as ramdaMap
 } from 'ramda'
 import {
     Coordinate,
-    CoordinateValues,
     get,
     getNeighborCoordinates,
     getNeighborValuesAndCoordinates,
@@ -140,15 +138,14 @@ function exposeNeighbors(coordinate: Coordinate, board: Board): Board {
     if (!cell.exposed || cell.flagged || cell.isMine) {
         return board
     }
-
     const adjacentValuesAndCoordinate = getNeighborValuesAndCoordinates(
         coordinate,
         board
     )
-    const [flagged, notFlagged]: [
-        CoordinateValues<Cell>,
-        CoordinateValues<Cell>
-    ] = partition(path(['value', 'flagged']), adjacentValuesAndCoordinate)
+    const [flagged, notFlagged] = partition(
+        c => c.value.flagged,
+        adjacentValuesAndCoordinate
+    )
 
     if (length(flagged) !== cell.adjacentMines) {
         return board

@@ -5,7 +5,6 @@ import {
     prop,
     length,
     take,
-    path,
     map as ramdaMap,
     range
 } from 'ramda'
@@ -241,7 +240,7 @@ describe('createBoard', () => {
                 board
             )
             const mines: CoordinateValues<Cell> = filter(
-                path(['value', 'isMine']),
+                c => c.value.isMine,
                 gridValues
             )
             const mineCoordinates: ReadonlyArray<Coordinate> = ramdaMap(
