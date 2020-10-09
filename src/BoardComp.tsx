@@ -32,7 +32,7 @@ function cellContent(cell: Cell): string {
     return cell.adjacentMines.toString()
 }
 
-function getCellCssClasses(cell: Cell): ReadonlyArray<string> {
+function getCssClassesForCell(cell: Cell): ReadonlyArray<string> {
     const base = ['board-cell']
     if (cell.exposed) {
         return append('exposed', base)
@@ -41,8 +41,8 @@ function getCellCssClasses(cell: Cell): ReadonlyArray<string> {
     }
 }
 
-function getCellCssClassesString(cell: Cell): string {
-    return getCellCssClasses(cell).join(' ')
+function getCssClassesForCellAsString(cell: Cell): string {
+    return getCssClassesForCell(cell).join(' ')
 }
 
 function createCell({
@@ -53,7 +53,7 @@ function createCell({
 }: CreateCellParams): React.ReactFragment {
     return (
         <td
-            className={getCellCssClassesString(cell)}
+            className={getCssClassesForCellAsString(cell)}
             key={JSON.stringify(coordinate)}
             onContextMenu={e => {
                 e.preventDefault()
