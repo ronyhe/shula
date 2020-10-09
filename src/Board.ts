@@ -86,12 +86,12 @@ function createBoard(
     return setAdjacentMines(boardWithMines)
 }
 
-function flag(coordinate: Coordinate, board: Board): Board {
+function toggleFlag(coordinate: Coordinate, board: Board): Board {
     const cell = get(coordinate, board)
     if (cell.exposed) {
         return board
     }
-    return update(coordinate, assoc('flagged', true), board)
+    return update(coordinate, assoc('flagged', !cell.flagged), board)
 }
 
 function expose(coordinate: Coordinate, board: Board): Board {
@@ -173,7 +173,7 @@ function repeat(
 export {
     createBoard,
     exposeNeighbors,
-    flag,
+    toggleFlag,
     expose,
     isExploded,
     isSolved,

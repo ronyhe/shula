@@ -12,7 +12,7 @@ import {
 import {
     Cell,
     createBoard,
-    flag,
+    toggleFlag,
     expose,
     isExploded,
     isSolved,
@@ -76,18 +76,26 @@ describe('createBoard', () => {
         ])
     })
 
-    describe('flagging', () => {
+    describe('toggleFlag', () => {
         const coordinate = { x: 0, y: 0 }
 
-        it('works for unexposed cells', () => {
-            const newBoard = flag(coordinate, board)
+        it('flags for unexposed cells', () => {
+            const newBoard = toggleFlag(coordinate, board)
             const cell = get(coordinate, newBoard)
             expect(cell.flagged).toBe(true)
         })
 
+        it('removes flags from flagged cells', () => {
+            const newBoard = toggleFlag(
+                coordinate,
+                toggleFlag(coordinate, board)
+            )
+            expect(newBoard).toEqual(board)
+        })
+
         it('ignores for exposed cells', () => {
             const newBoard = update(coordinate, assoc('exposed', true), board)
-            expect(flag(coordinate, newBoard)).toEqual(newBoard)
+            expect(toggleFlag(coordinate, newBoard)).toEqual(newBoard)
         })
     })
 
@@ -135,13 +143,13 @@ describe('createBoard', () => {
 
             it('ignores for flagged cells', () => {
                 const coordinate = { x: 0, y: 0 }
-                const flagged = flag(coordinate, board)
+                const flagged = toggleFlag(coordinate, board)
                 expect(exposeNeighbors(coordinate, flagged)).toEqual(flagged)
             })
 
             it('ignores if not all adjacent mines are flagged', () => {
                 const coordinate = { x: 1, y: 0 }
-                const partiallyFlagged = flag({ x: 0, y: 0 }, board)
+                const partiallyFlagged = toggleFlag({ x: 0, y: 0 }, board)
                 expect(exposeNeighbors(coordinate, partiallyFlagged)).toEqual(
                     partiallyFlagged
                 )
@@ -165,7 +173,11 @@ describe('createBoard', () => {
             ]
 
             it('exposes all unexposed non flagged neighboring cells', () => {
-                const flagged = repeat(flag, mines, boardWithNumberExposed)
+                const flagged = repeat(
+                    toggleFlag,
+                    mines,
+                    boardWithNumberExposed
+                )
                 const exposed = exposeNeighbors(coordinate, flagged)
                 const shouldBeExposed = [
                     { x: 2, y: 0 },
@@ -182,8 +194,8 @@ describe('createBoard', () => {
             })
 
             it('exposes mines if an incorrect cell is flagged', () => {
-                const correctFlag = flag(mines[0], boardWithNumberExposed)
-                const incorrectFlag = flag({ x: 2, y: 0 }, correctFlag)
+                const correctFlag = toggleFlag(mines[0], boardWithNumberExposed)
+                const incorrectFlag = toggleFlag({ x: 2, y: 0 }, correctFlag)
                 const exposed = exposeNeighbors(coordinate, incorrectFlag)
                 expect(isExploded(exposed)).toBe(true)
                 range(0, 3).forEach(x => {
@@ -207,7 +219,7 @@ describe('createBoard', () => {
         describe('incorrect flag amount', () => {
             const mineCount = length(filter(prop('isMine'), values(board)))
             const flagCells: (n: number) => Board = n =>
-                repeat(flag, take(n, coordinates(board)), board)
+                repeat(toggleFlag, take(n, coordinates(board)), board)
 
             it('returns false if a there are more flags than mines', () => {
                 expect(isSolved(flagCells(mineCount + 1))).toBe(false)
@@ -236,7 +248,7 @@ describe('createBoard', () => {
                 prop('coordinate'),
                 mines
             )
-            const flaggedBoard = repeat(flag, mineCoordinates, board)
+            const flaggedBoard = repeat(toggleFlag, mineCoordinates, board)
             expect(isSolved(flaggedBoard)).toBe(true)
         })
     })

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Board, createBoard, expose, flag } from './Board'
+import { Board, createBoard, expose, toggleFlag } from './Board'
 import { Coordinate } from './Grid'
 import { getRandomInt } from './utils'
 import { range } from 'ramda'
@@ -33,7 +33,7 @@ const App: React.FunctionComponent = () => {
         <BoardComp
             board={board}
             onExpose={coordinate => setBoard(expose(coordinate, board))}
-            onFlag={coordinate => setBoard(flag(coordinate, board))}
+            onFlag={coordinate => setBoard(toggleFlag(coordinate, board))}
         />
     )
 }
