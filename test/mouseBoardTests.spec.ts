@@ -25,9 +25,16 @@ describe('mouse events', () => {
         })
 
         it('un-clicks buttons', () => {
-            eventsTest(assoc('left', false), ['upLeft'])
+            eventsTest(assoc('left', false), ['downLeft', 'upLeft'])
 
-            eventsTest(assoc('right', false), ['upRight'])
+            eventsTest(assoc('right', false), ['downRight', 'upRight'])
+        })
+
+        it('enters and leaves coordinates', () => {
+            const coordinate = { x: 0, y: 0 }
+            eventsTest(assoc('pointer', coordinate), [coordinate])
+
+            eventsTest(assoc('pointer', null), [coordinate, 'leave'])
         })
     })
 })
