@@ -7,7 +7,7 @@ import { append } from 'ramda'
 type CoordinateCallback = Consumer<Coordinate>
 
 interface BoardCompProps {
-    readonly board: Board
+    readonly board: Board<Cell>
     readonly onExpose: CoordinateCallback
     readonly onFlag: CoordinateCallback
 }

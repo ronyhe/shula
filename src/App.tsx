@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Board, createBoard, expose, toggleFlag } from './Board'
+import { Board, Cell, createBoard, expose, toggleFlag } from './Board'
 import { Coordinate } from './Grid'
 import { getRandomInt } from './utils'
 import { range } from 'ramda'
@@ -16,14 +16,14 @@ function createRandomBoard(
     width: number,
     height: number,
     mines: number
-): Board {
+): Board<Cell> {
     const mineCoordinates = range(0, mines).map(() =>
         createRandomCoordinate(width, height)
     )
     return createBoard(width, height, mineCoordinates)
 }
 
-function createRandomExpertBoard(): Board {
+function createRandomExpertBoard(): Board<Cell> {
     return createRandomBoard(30, 16, 99)
 }
 

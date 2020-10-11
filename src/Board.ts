@@ -30,7 +30,7 @@ interface Cell {
     readonly adjacentMines: number
 }
 
-type Board = Grid<Cell>
+type Board<C extends Cell> = Grid<C>
 
 const DefaultCell: Cell = {
     flagged: false,
@@ -41,8 +41,8 @@ const DefaultCell: Cell = {
 
 function setMines(
     minePositions: ReadonlyArray<Coordinate>,
-    board: Board
-): Board {
+    board: Board<Cell>
+): Board<Cell> {
     return map((cell, coordinate) => {
         const shouldBeMine = includes(coordinate, minePositions)
         return {
@@ -52,7 +52,10 @@ function setMines(
     }, board)
 }
 
-function countAdjacentMines(coordinate: Coordinate, boardWithMines: Board) {
+function countAdjacentMines<C extends Cell>(
+    coordinate: Coordinate,
+    boardWithMines: Board<C>
+) {
     const adjacentCoordinates = getNeighborCoordinates(
         coordinate,
         boardWithMines
@@ -64,7 +67,7 @@ function countAdjacentMines(coordinate: Coordinate, boardWithMines: Board) {
     return length(mines)
 }
 
-function setAdjacentMines(boardWithMines: Board): Board {
+function setAdjacentMines<C extends Cell>(boardWithMines: Board<C>): Board<C> {
     const count = (coordinate: Coordinate) =>
         countAdjacentMines(coordinate, boardWithMines)
     return map(
@@ -77,14 +80,17 @@ function createBoard(
     width: number,
     height: number,
     minePositions: ReadonlyArray<Coordinate>
-): Board {
+): Board<Cell> {
     const row = range(0, width).map(() => DefaultCell)
     const blankBoard = range(0, height).map(() => row)
     const boardWithMines = setMines(minePositions, blankBoard)
     return setAdjacentMines(boardWithMines)
 }
 
-function toggleFlag(coordinate: Coordinate, board: Board): Board {
+function toggleFlag<C extends Cell>(
+    coordinate: Coordinate,
+    board: Board<C>
+): Board<C> {
     const cell = get(coordinate, board)
     if (cell.exposed) {
         return board
@@ -92,7 +98,10 @@ function toggleFlag(coordinate: Coordinate, board: Board): Board {
     return update(coordinate, assoc('flagged', !cell.flagged), board)
 }
 
-function expose(coordinate: Coordinate, board: Board): Board {
+function expose<C extends Cell>(
+    coordinate: Coordinate,
+    board: Board<C>
+): Board<C> {
     const cell = get(coordinate, board)
     if (cell.exposed || cell.flagged) {
         return board
@@ -114,12 +123,12 @@ const explodedCell: (cell: Cell) => boolean = both(
     prop('exposed')
 )
 
-function isExploded(board: Board): boolean {
+function isExploded<C extends Cell>(board: Board<C>): boolean {
     const cells = values(board)
     return any(explodedCell, cells)
 }
 
-function isSolved(board: Board): boolean {
+function isSolved<C extends Cell>(board: Board<C>): boolean {
     const cellIsCorrect: (c: Cell) => boolean = cell => {
         if (cell.isMine) {
             return cell.flagged && !cell.exposed
@@ -133,7 +142,10 @@ function isSolved(board: Board): boolean {
  * In the classic minesweeper game this happens when clicking a number
  * with the left and the right mouse buttons at the same time
  */
-function exposeNeighbors(coordinate: Coordinate, board: Board): Board {
+function exposeNeighbors<C extends Cell>(
+    coordinate: Coordinate,
+    board: Board<C>
+): Board<C> {
     const cell = get(coordinate, board)
     if (!cell.exposed || cell.flagged || cell.isMine) {
         return board
@@ -155,11 +167,11 @@ function exposeNeighbors(coordinate: Coordinate, board: Board): Board {
     return repeat(expose, coordinatesToExpose, board)
 }
 
-function repeat(
-    action: (coordinate: Coordinate, board: Board) => Board,
+function repeat<C extends Cell>(
+    action: (coordinate: Coordinate, board: Board<C>) => Board<C>,
     coordinates: ReadonlyArray<Coordinate>,
-    board: Board
-): Board {
+    board: Board<C>
+): Board<C> {
     return reduce(
         (acc, coordinate) => action(coordinate, acc),
         board,

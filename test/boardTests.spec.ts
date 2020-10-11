@@ -217,7 +217,7 @@ describe('createBoard', () => {
     describe('isSolved', () => {
         describe('incorrect flag amount', () => {
             const mineCount = length(filter(prop('isMine'), values(board)))
-            const flagCells: (n: number) => Board = n =>
+            const flagCells: (n: number) => Board<Cell> = n =>
                 repeat(toggleFlag, take(n, coordinates(board)), board)
 
             it('returns false if a there are more flags than mines', () => {
