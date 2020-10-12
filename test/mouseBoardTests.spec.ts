@@ -6,9 +6,9 @@ import {
     processEvents
 } from '../src/MouseBoard'
 import { board as testBoard } from './testBoard'
-import { always, assoc, curry, evolve, T } from 'ramda'
+import { always, assoc, curry, evolve, pipe, T } from 'ramda'
 import { expose, toggleFlag } from '../src/Board'
-import { get, getNeighborCoordinates } from '../src/Grid'
+import { get, getNeighborCoordinates, Grid } from '../src/Grid'
 
 const board = createMouseBoard(testBoard)
 
@@ -68,6 +68,30 @@ describe('mouse events', () => {
         })
     })
 
+    describe('chording', () => {
+        it('chords exposed cells', () => {
+            const coordinate = { x: 2, y: 0 }
+            const ready = {
+                ...board,
+                board: toggleFlag(
+                    { x: 1, y: 1 },
+                    expose(coordinate, board.board)
+                )
+            }
+            const processed = processEvents(ready, [
+                coordinate,
+                'downLeft',
+                'downRight',
+                'upLeft'
+            ])
+            const grid = board.board
+            getNeighborCoordinates(coordinate, grid).forEach(c => {
+                const cell = get(c, processed.board)
+                expect(cell.exposed || cell.flagged).toBe(true)
+            })
+        })
+    })
+
     describe('indentation', () => {
         it('indents exposed cells', () => {
             const coordinate = { x: 1, y: 0 }
@@ -116,7 +140,7 @@ describe('mouse events', () => {
             expect(cell2.indent).toBe(true)
         })
 
-        it.skip('indents neighbors when both keys are down, if the cell is exposed', () => {
+        it('indents neighbors when both keys are down, if the cell is exposed', () => {
             const coordinate = { x: 2, y: 0 }
             const exposed = {
                 ...board,

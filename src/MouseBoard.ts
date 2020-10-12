@@ -1,5 +1,20 @@
-import { Board, Cell, expose, toggleFlag } from './Board'
-import { Coordinate, map, update } from './Grid'
+import {
+    Board,
+    Cell,
+    expose,
+    exposeNeighbors,
+    toggleFlag,
+    validForNeighborExposure
+} from './Board'
+import {
+    Coordinate,
+    coordinates,
+    get,
+    getNeighborCoordinates,
+    getNeighborValuesAndCoordinates,
+    map,
+    update
+} from './Grid'
 import { assoc, identity, ifElse, lensProp, over, prop, reduce } from 'ramda'
 
 interface MouseCell extends Cell {
@@ -23,6 +38,29 @@ type MouseBoardEvent =
     | Coordinate
 
 const indentCell: (c: MouseCell) => MouseCell = assoc('indent', true)
+
+const deDentCell: (c: MouseCell) => MouseCell = assoc('indent', false)
+
+function deDentAll(board: MouseBoard): MouseBoard {
+    return {
+        ...board,
+        board: map(deDentCell, board.board)
+    }
+}
+
+function indentCells(
+    board: MouseBoard,
+    coordinates: ReadonlyArray<Coordinate>
+): MouseBoard {
+    return {
+        ...board,
+        board: reduce(
+            (acc, coordinate) => update(coordinate, indentCell, acc),
+            board.board,
+            coordinates
+        )
+    }
+}
 
 function attachDefaults(board: Board<MouseCell>): MouseBoard {
     return {
@@ -104,12 +142,47 @@ function updateLeftButtonIndentation(board: MouseBoard): MouseBoard {
     return board
 }
 
+function updateChordIndent(board: MouseBoard): MouseBoard {
+    if (
+        board.left &&
+        board.right &&
+        board.pointer &&
+        get(board.pointer, board.board).exposed
+    ) {
+        return indentCells(
+            board,
+            getNeighborCoordinates(board.pointer, board.board)
+        )
+    }
+    return board
+}
+
+function updateChord(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
+    const chordPickUp =
+        (board.left && event === 'upRight') ||
+        (board.right && event === 'upLeft')
+    if (
+        chordPickUp &&
+        board.pointer &&
+        validForNeighborExposure(board.pointer, board.board)
+    ) {
+        return {
+            ...board,
+            board: exposeNeighbors(board.pointer, board.board)
+        }
+    }
+    return board
+}
+
 function processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
-    const mouseState = updateMouseState(board, event)
+    const noIndents = deDentAll(board)
+    const mouseState = updateMouseState(noIndents, event)
     const flags = updateFlags(mouseState, event)
     const exposed = updateExposed(flags, event)
     const leftIndent = updateLeftButtonIndentation(exposed)
-    return indentExposedCells(leftIndent)
+    const chordIndent = updateChordIndent(leftIndent)
+    const chord = updateChord(chordIndent, event)
+    return indentExposedCells(chord)
 }
 
 const processEvents: (

@@ -146,25 +146,28 @@ function exposeNeighbors<C extends Cell>(
     coordinate: Coordinate,
     board: Board<C>
 ): Board<C> {
-    const cell = get(coordinate, board)
-    if (!cell.exposed || cell.flagged || cell.isMine) {
+    if (!validForNeighborExposure(coordinate, board)) {
         return board
+    }
+    const coordinatesToExpose = getNeighborCoordinates(coordinate, board)
+    return repeat(expose, coordinatesToExpose, board)
+}
+
+function validForNeighborExposure<C extends Cell>(
+    coordinate: Coordinate,
+    board: Board<C>
+): boolean {
+    const cell = get(coordinate, board)
+    if (!cell.exposed || cell.flagged) {
+        return false
     }
     const adjacentValuesAndCoordinate = getNeighborValuesAndCoordinates(
         coordinate,
         board
     )
-    const [flagged, notFlagged] = partition(
-        c => c.value.flagged,
-        adjacentValuesAndCoordinate
-    )
+    const flagged = filter(c => c.value.flagged, adjacentValuesAndCoordinate)
 
-    if (length(flagged) !== cell.adjacentMines) {
-        return board
-    }
-
-    const coordinatesToExpose = ramdaMap(prop('coordinate'), notFlagged)
-    return repeat(expose, coordinatesToExpose, board)
+    return length(flagged) === cell.adjacentMines
 }
 
 function repeat<C extends Cell>(
@@ -181,6 +184,7 @@ function repeat<C extends Cell>(
 
 export {
     createBoard,
+    validForNeighborExposure,
     exposeNeighbors,
     toggleFlag,
     expose,
