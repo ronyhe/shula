@@ -8,7 +8,7 @@ import {
 import { board as testBoard } from './testBoard'
 import { always, assoc, curry, evolve, T } from 'ramda'
 import { expose, toggleFlag } from '../src/Board'
-import { get } from '../src/Grid'
+import { get, getNeighborCoordinates } from '../src/Grid'
 
 const board = createMouseBoard(testBoard)
 
@@ -114,6 +114,27 @@ describe('mouse events', () => {
             expect(processed2.left).toBe(true)
             const cell2 = get(coordinates[1], processed2.board)
             expect(cell2.indent).toBe(true)
+        })
+
+        it.skip('indents neighbors when both keys are down, if the cell is exposed', () => {
+            const coordinate = { x: 2, y: 0 }
+            const exposed = {
+                ...board,
+                board: expose(coordinate, board.board)
+            }
+            const processed = processEvents(exposed, [
+                coordinate,
+                'downLeft',
+                'downRight'
+            ])
+            const expectedIndentations = getNeighborCoordinates(
+                coordinate,
+                processed.board
+            )
+            expectedIndentations.forEach(c => {
+                const cell = get(c, processed.board)
+                expect(cell.indent).toBe(true)
+            })
         })
     })
 })

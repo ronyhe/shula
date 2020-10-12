@@ -1,18 +1,6 @@
 import { Board, Cell, expose, toggleFlag } from './Board'
 import { Coordinate, map, update } from './Grid'
-import {
-    always,
-    assoc,
-    evolve,
-    F,
-    identity,
-    ifElse,
-    lensProp,
-    over,
-    prop,
-    reduce,
-    T
-} from 'ramda'
+import { assoc, identity, ifElse, lensProp, over, prop, reduce } from 'ramda'
 
 interface MouseCell extends Cell {
     readonly indent: boolean
@@ -50,7 +38,10 @@ function createMouseBoard(board: Board<Cell>): MouseBoard {
     return attachDefaults(mouseBoard)
 }
 
-function _processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
+function updateMouseState(
+    board: MouseBoard,
+    event: MouseBoardEvent
+): MouseBoard {
     if (event === 'reset') {
         return attachDefaults(board.board)
     }
@@ -58,38 +49,18 @@ function _processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
         return assoc('pointer', null, board)
     }
     if (event === 'upLeft') {
-        return evolve({
-            left: F,
-            board: b => (board.pointer ? expose(board.pointer, b) : b)
-        })(board)
+        return assoc('left', false, board)
     }
     if (event === 'upRight') {
         return assoc('right', false, board)
     }
     if (event === 'downLeft') {
-        return evolve(
-            {
-                left: T,
-                board: b =>
-                    board.pointer ? update(board.pointer, indentCell, b) : b
-            },
-            board
-        )
+        return assoc('left', true, board)
     }
     if (event === 'downRight') {
-        return evolve({
-            right: T,
-            board: b => (board.pointer ? toggleFlag(board.pointer, b) : b)
-        })(board)
+        return assoc('right', true, board)
     }
-    const pointer: Coordinate = event
-    return evolve(
-        {
-            pointer: always(pointer),
-            board: b => (board.left ? update(pointer, indentCell, b) : b)
-        },
-        board
-    )
+    return assoc('pointer', event, board)
 }
 
 const indentCellIfExposed: (cell: MouseCell) => MouseCell = ifElse(
@@ -103,9 +74,42 @@ const indentExposedCells: (board: MouseBoard) => MouseBoard = over(
     b => map(indentCellIfExposed, b)
 )
 
+function updateFlags(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
+    if (event === 'downRight' && board.pointer) {
+        return {
+            ...board,
+            board: toggleFlag(board.pointer, board.board)
+        }
+    }
+    return board
+}
+
+function updateExposed(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
+    if (event === 'upLeft' && board.pointer) {
+        return {
+            ...board,
+            board: expose(board.pointer, board.board)
+        }
+    }
+    return board
+}
+
+function updateLeftButtonIndentation(board: MouseBoard): MouseBoard {
+    if (board.left && board.pointer) {
+        return {
+            ...board,
+            board: update(board.pointer, indentCell, board.board)
+        }
+    }
+    return board
+}
+
 function processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
-    const processed = _processEvent(board, event)
-    return indentExposedCells(processed)
+    const mouseState = updateMouseState(board, event)
+    const flags = updateFlags(mouseState, event)
+    const exposed = updateExposed(flags, event)
+    const leftIndent = updateLeftButtonIndentation(exposed)
+    return indentExposedCells(leftIndent)
 }
 
 const processEvents: (
