@@ -6,7 +6,7 @@ import {
     processEvents
 } from '../src/MouseBoard'
 import { board as testBoard } from './testBoard'
-import { always, assoc, curry, evolve, F, T } from 'ramda'
+import { always, assoc, curry, evolve, T } from 'ramda'
 import { expose, toggleFlag } from '../src/Board'
 import { get } from '../src/Grid'
 
