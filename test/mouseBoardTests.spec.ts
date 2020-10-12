@@ -42,7 +42,7 @@ describe('mouse events', () => {
     describe('basic mouse ops', () => {
         const coordinate = { x: 0, y: 0 }
 
-        it('toggles flags in right key down', () => {
+        it('toggles flags on right key down', () => {
             const toggle = curry(toggleFlag)
 
             eventsTest(
