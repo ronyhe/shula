@@ -39,7 +39,7 @@ describe('mouse events', () => {
         })
     })
 
-    describe.skip('basic mouse ops', () => {
+    describe('basic mouse ops', () => {
         const coordinate = { x: 0, y: 0 }
 
         it('toggles flags in right key down', () => {

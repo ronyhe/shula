@@ -1,6 +1,6 @@
-import { Board, Cell } from './Board'
+import { Board, Cell, expose, toggleFlag } from './Board'
 import { Coordinate, map } from './Grid'
-import { assoc, reduce } from 'ramda'
+import { assoc, evolve, F, reduce, T } from 'ramda'
 
 interface MouseCell extends Cell {
     readonly indent: boolean
@@ -44,7 +44,10 @@ function processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
         return assoc('pointer', null, board)
     }
     if (event === 'upLeft') {
-        return assoc('left', false, board)
+        return evolve({
+            left: F,
+            board: b => (board.pointer ? expose(board.pointer, b) : b)
+        })(board)
     }
     if (event === 'upRight') {
         return assoc('right', false, board)
@@ -53,7 +56,10 @@ function processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
         return assoc('left', true, board)
     }
     if (event === 'downRight') {
-        return assoc('right', true, board)
+        return evolve({
+            right: T,
+            board: b => (board.pointer ? toggleFlag(board.pointer, b) : b)
+        })(board)
     }
     return assoc('pointer', event, board)
 }
