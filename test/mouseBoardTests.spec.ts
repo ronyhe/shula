@@ -95,5 +95,25 @@ describe('mouse events', () => {
             const cell = get(coordinate, processed.board)
             expect(cell.indent).toBe(true)
         })
+
+        it('indents unexposed cells under mouse pointer when left key moves', () => {
+            const coordinates = [
+                { x: 0, y: 0 },
+                { x: 1, y: 1 }
+            ]
+
+            const processed1 = processEvents(board, [
+                'downLeft',
+                coordinates[0]
+            ])
+            expect(processed1.left).toBe(true)
+            const cell1 = get(coordinates[0], processed1.board)
+            expect(cell1.indent).toBe(true)
+
+            const processed2 = processEvent(processed1, coordinates[1])
+            expect(processed2.left).toBe(true)
+            const cell2 = get(coordinates[1], processed2.board)
+            expect(cell2.indent).toBe(true)
+        })
     })
 })
