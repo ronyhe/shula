@@ -11,7 +11,8 @@
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts --ext .tsx .",
     "test": "jest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check-all": "yarn lint && yarn typecheck && yarn test"
   },
   "keywords": [],
   "author": {

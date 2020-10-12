@@ -6,9 +6,9 @@ import {
     processEvents
 } from '../src/MouseBoard'
 import { board as testBoard } from './testBoard'
-import { always, assoc, curry, evolve, pipe, T } from 'ramda'
+import { always, assoc, curry, evolve, T } from 'ramda'
 import { expose, toggleFlag } from '../src/Board'
-import { get, getNeighborCoordinates, Grid } from '../src/Grid'
+import { get, getNeighborCoordinates } from '../src/Grid'
 
 const board = createMouseBoard(testBoard)
 

@@ -8,9 +8,7 @@ import {
     reduce,
     any,
     both,
-    all,
-    partition,
-    map as ramdaMap
+    all
 } from 'ramda'
 import {
     Coordinate,

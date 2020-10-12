@@ -6,15 +6,7 @@ import {
     toggleFlag,
     validForNeighborExposure
 } from './Board'
-import {
-    Coordinate,
-    coordinates,
-    get,
-    getNeighborCoordinates,
-    getNeighborValuesAndCoordinates,
-    map,
-    update
-} from './Grid'
+import { Coordinate, get, getNeighborCoordinates, map, update } from './Grid'
 import { assoc, identity, ifElse, lensProp, over, prop, reduce } from 'ramda'
 
 interface MouseCell extends Cell {
