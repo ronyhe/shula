@@ -5,13 +5,14 @@ import {
     processEvents
 } from '../src/MouseBoard'
 import { board as testBoard } from './testBoard'
-import { assoc } from 'ramda'
+import { always, assoc, curry, evolve, F, T } from 'ramda'
+import { expose, toggleFlag } from '../src/Board'
 
 const board = createMouseBoard(testBoard)
 
 function eventsTest(
-    createExpected: (b: MouseBoard) => MouseBoard,
-    events: ReadonlyArray<MouseBoardEvent>
+    events: ReadonlyArray<MouseBoardEvent>,
+    createExpected: (b: MouseBoard) => MouseBoard
 ): void {
     expect(processEvents(board, events)).toEqual(createExpected(board))
 }
@@ -19,22 +20,52 @@ function eventsTest(
 describe('mouse events', () => {
     describe('simple state changes, regardless of indentation', () => {
         it('clicks buttons', () => {
-            eventsTest(assoc('left', true), ['downLeft'])
+            eventsTest(['downLeft'], assoc('left', true))
 
-            eventsTest(assoc('right', true), ['downRight'])
+            eventsTest(['downRight'], assoc('right', true))
         })
 
         it('un-clicks buttons', () => {
-            eventsTest(assoc('left', false), ['downLeft', 'upLeft'])
+            eventsTest(['downLeft', 'upLeft'], assoc('left', false))
 
-            eventsTest(assoc('right', false), ['downRight', 'upRight'])
+            eventsTest(['downRight', 'upRight'], assoc('right', false))
         })
 
         it('enters and leaves coordinates', () => {
             const coordinate = { x: 0, y: 0 }
-            eventsTest(assoc('pointer', coordinate), [coordinate])
+            eventsTest([coordinate], assoc('pointer', coordinate))
 
-            eventsTest(assoc('pointer', null), [coordinate, 'leave'])
+            eventsTest([coordinate, 'leave'], assoc('pointer', null))
+        })
+    })
+
+    describe.skip('basic mouse ops', () => {
+        const coordinate = { x: 0, y: 0 }
+
+        it('toggles flags in right key down', () => {
+            const toggle = curry(toggleFlag)
+
+            eventsTest(
+                [coordinate, 'downRight'],
+                evolve({
+                    pointer: always(coordinate),
+                    right: T,
+                    board: toggle(coordinate)
+                })
+            )
+        })
+
+        it('exposes on left key up', () => {
+            const expo = curry(expose)
+
+            eventsTest(
+                [coordinate, 'upLeft'],
+                evolve({
+                    pointer: always(coordinate),
+                    left: F,
+                    board: expo(coordinate)
+                })
+            )
         })
     })
 })
