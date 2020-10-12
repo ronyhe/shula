@@ -2,11 +2,13 @@ import {
     createMouseBoard,
     MouseBoard,
     MouseBoardEvent,
+    processEvent,
     processEvents
 } from '../src/MouseBoard'
 import { board as testBoard } from './testBoard'
 import { always, assoc, curry, evolve, F, T } from 'ramda'
 import { expose, toggleFlag } from '../src/Board'
+import { get } from '../src/Grid'
 
 const board = createMouseBoard(testBoard)
 
@@ -40,9 +42,8 @@ describe('mouse events', () => {
     })
 
     describe('basic mouse ops', () => {
-        const coordinate = { x: 0, y: 0 }
-
         it('toggles flags on right key down', () => {
+            const coordinate = { x: 0, y: 0 }
             const toggle = curry(toggleFlag)
 
             eventsTest(
@@ -56,16 +57,27 @@ describe('mouse events', () => {
         })
 
         it('exposes on left key up', () => {
-            const expo = curry(expose)
+            const coordinate = { x: 1, y: 0 }
+            const exposed = {
+                ...board,
+                board: expose(coordinate, board.board)
+            }
+            const processed = processEvent(exposed, 'upLeft')
+            const cell = get(coordinate, processed.board)
+            expect(cell.exposed).toBe(true)
+        })
+    })
 
-            eventsTest(
-                [coordinate, 'upLeft'],
-                evolve({
-                    pointer: always(coordinate),
-                    left: F,
-                    board: expo(coordinate)
-                })
-            )
+    describe('indentation', () => {
+        it('indents exposed cells', () => {
+            const coordinate = { x: 1, y: 0 }
+            const exposed = {
+                ...board,
+                board: expose(coordinate, board.board)
+            }
+            const processed = processEvent(exposed, 'reset')
+            const cell = get(coordinate, processed.board)
+            expect(cell.indent).toBe(true)
         })
     })
 })

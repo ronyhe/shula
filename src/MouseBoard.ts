@@ -1,6 +1,6 @@
 import { Board, Cell, expose, toggleFlag } from './Board'
 import { Coordinate, map } from './Grid'
-import { assoc, evolve, F, reduce, T } from 'ramda'
+import { assoc, evolve, F, identity, ifElse, path, reduce, T } from 'ramda'
 
 interface MouseCell extends Cell {
     readonly indent: boolean
@@ -36,7 +36,7 @@ function createMouseBoard(board: Board<Cell>): MouseBoard {
     return attachDefaults(mouseBoard)
 }
 
-function processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
+function _processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
     if (event === 'reset') {
         return attachDefaults(board.board)
     }
@@ -62,6 +62,21 @@ function processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
         })(board)
     }
     return assoc('pointer', event, board)
+}
+
+function indentExposedCells(board: MouseBoard): MouseBoard {
+    return {
+        ...board,
+        board: map(
+            cell => (cell.exposed ? { ...cell, indent: true } : cell),
+            board.board
+        )
+    }
+}
+
+function processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
+    const processed = _processEvent(board, event)
+    return indentExposedCells(processed)
 }
 
 const processEvents: (
