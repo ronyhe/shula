@@ -1,5 +1,5 @@
 import { Board, Cell, expose, toggleFlag } from './Board'
-import { Coordinate, map, set, update } from './Grid'
+import { Coordinate, map, update } from './Grid'
 import {
     always,
     assoc,
@@ -33,6 +33,8 @@ type MouseBoardEvent =
     | 'downLeft'
     | 'downRight'
     | Coordinate
+
+const indentCell: (c: MouseCell) => MouseCell = assoc('indent', true)
 
 function attachDefaults(board: Board<MouseCell>): MouseBoard {
     return {
@@ -69,9 +71,7 @@ function _processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
             {
                 left: T,
                 board: b =>
-                    board.pointer
-                        ? update(board.pointer, assoc('indent', true), b)
-                        : b
+                    board.pointer ? update(board.pointer, indentCell, b) : b
             },
             board
         )
@@ -86,8 +86,7 @@ function _processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
     return evolve(
         {
             pointer: always(pointer),
-            board: b =>
-                board.left ? update(pointer, assoc('indent', true), b) : b
+            board: b => (board.left ? update(pointer, indentCell, b) : b)
         },
         board
     )
@@ -95,7 +94,7 @@ function _processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
 
 const indentCellIfExposed: (cell: MouseCell) => MouseCell = ifElse(
     prop('exposed'),
-    assoc('indent', true),
+    indentCell,
     identity
 )
 
