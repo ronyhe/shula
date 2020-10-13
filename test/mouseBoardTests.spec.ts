@@ -140,24 +140,29 @@ describe('mouse events', () => {
             expect(cell2.indent).toBe(true)
         })
 
-        it('indents neighbors when both keys are down, if the cell is exposed', () => {
-            const coordinate = { x: 2, y: 0 }
-            const exposed = {
+        it('indents neighbors when both keys are down, if the cell is exposed, unless they are flagged', () => {
+            const exposedCoordinate = { x: 2, y: 0 }
+            const flagCoordinate = { x: 1, y: 0 }
+            const indentBoard = {
                 ...board,
-                board: expose(coordinate, board.board)
+                board: toggleFlag(
+                    flagCoordinate,
+                    expose(exposedCoordinate, board.board)
+                )
             }
-            const processed = processEvents(exposed, [
-                coordinate,
+            const processed = processEvents(indentBoard, [
+                exposedCoordinate,
                 'downLeft',
                 'downRight'
             ])
             const expectedIndentations = getNeighborCoordinates(
-                coordinate,
+                exposedCoordinate,
                 processed.board
             )
             expectedIndentations.forEach(c => {
                 const cell = get(c, processed.board)
-                expect(cell.indent).toBe(true)
+                const shouldIndent = !cell.flagged
+                expect(cell.indent).toBe(shouldIndent)
             })
         })
     })

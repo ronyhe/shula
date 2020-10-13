@@ -29,7 +29,11 @@ type MouseBoardEvent =
     | 'downRight'
     | Coordinate
 
-const indentCell: (c: MouseCell) => MouseCell = assoc('indent', true)
+const indentCell: (c: MouseCell) => MouseCell = ifElse(
+    prop('flagged'),
+    identity,
+    assoc('indent', true)
+)
 
 const deDentCell: (c: MouseCell) => MouseCell = assoc('indent', false)
 
