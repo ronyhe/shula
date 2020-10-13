@@ -32,6 +32,6 @@ body {
   background-color: lightgray;
 }
 
-.board-cell.exposed {
+.board-cell.indent {
   box-shadow: inset 1px 1px darkgrey;
 }

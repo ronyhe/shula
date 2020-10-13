@@ -1,25 +1,21 @@
 import * as React from 'react'
-import { Board, Cell } from './Board'
+import { Cell } from './Board'
 import { Coordinate } from './Grid'
-import { Consumer } from './utils'
 import { append } from 'ramda'
-
-type CoordinateCallback = Consumer<Coordinate>
+import { MouseBoard, MouseBoardEvent, MouseCell } from './MouseBoard'
 
 interface BoardCompProps {
-    readonly board: Board<Cell>
-    readonly onExpose: CoordinateCallback
-    readonly onFlag: CoordinateCallback
+    readonly board: MouseBoard
+    onEvent(event: MouseBoardEvent): void
 }
 
 interface CreateCellParams {
-    readonly cell: Cell
+    readonly cell: MouseCell
     readonly coordinate: Coordinate
-    readonly onExpose: CoordinateCallback
-    readonly onFlag: CoordinateCallback
+    onEvent(event: MouseBoardEvent): void
 }
 
-function cellContent(cell: Cell): string {
+function cellContent(cell: MouseCell): string {
     if (cell.flagged) {
         return 'f'
     }
@@ -32,24 +28,23 @@ function cellContent(cell: Cell): string {
     return cell.adjacentMines.toString()
 }
 
-function getCssClassesForCell(cell: Cell): ReadonlyArray<string> {
+function getCssClassesForCell(cell: MouseCell): ReadonlyArray<string> {
     const base = ['board-cell']
-    if (cell.exposed) {
-        return append('exposed', base)
+    if (cell.indent) {
+        return append('indent', base)
     } else {
         return base
     }
 }
 
-function getCssClassesForCellAsString(cell: Cell): string {
+function getCssClassesForCellAsString(cell: MouseCell): string {
     return getCssClassesForCell(cell).join(' ')
 }
 
 function createCell({
     cell,
     coordinate,
-    onExpose,
-    onFlag
+    onEvent
 }: CreateCellParams): React.ReactFragment {
     return (
         <td
@@ -57,9 +52,25 @@ function createCell({
             key={JSON.stringify(coordinate)}
             onContextMenu={e => {
                 e.preventDefault()
-                onFlag(coordinate)
             }}
-            onClick={() => onExpose(coordinate)}
+            onMouseEnter={() => onEvent(coordinate)}
+            onMouseLeave={() => onEvent('leave')}
+            onMouseDown={e => {
+                if (e.button === 0) {
+                    onEvent('downLeft')
+                }
+                if (e.button === 2) {
+                    onEvent('downRight')
+                }
+            }}
+            onMouseUp={e => {
+                if (e.button === 0) {
+                    onEvent('upLeft')
+                }
+                if (e.button === 2) {
+                    onEvent('upRight')
+                }
+            }}
         >
             {cellContent(cell)}
         </td>
@@ -68,21 +79,19 @@ function createCell({
 
 const BoardComp: React.FunctionComponent<BoardCompProps> = ({
     board,
-    onExpose,
-    onFlag
+    onEvent
 }) => {
     return (
         <table className="board-table">
             <tbody>
-                {board.map((row, rowIndex) => (
+                {board.board.map((row, rowIndex) => (
                     <tr key={`${rowIndex}`} className="board-row">
                         {row.map((cell, cellIndex) => {
                             const coordinate = { x: cellIndex, y: rowIndex }
                             return createCell({
                                 cell,
                                 coordinate,
-                                onExpose,
-                                onFlag
+                                onEvent
                             })
                         })}
                     </tr>

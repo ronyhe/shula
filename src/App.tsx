@@ -4,6 +4,7 @@ import { Coordinate } from './Grid'
 import { getRandomInt } from './utils'
 import { range } from 'ramda'
 import { BoardComp } from './BoardComp'
+import { createMouseBoard, processEvent } from './MouseBoard'
 
 function createRandomCoordinate(width: number, height: number): Coordinate {
     return {
@@ -28,12 +29,13 @@ function createRandomExpertBoard(): Board<Cell> {
 }
 
 const App: React.FunctionComponent = () => {
-    const [board, setBoard] = React.useState(createRandomExpertBoard())
+    const [board, setBoard] = React.useState(
+        createMouseBoard(createRandomExpertBoard())
+    )
     return (
         <BoardComp
             board={board}
-            onExpose={coordinate => setBoard(expose(coordinate, board))}
-            onFlag={coordinate => setBoard(toggleFlag(coordinate, board))}
+            onEvent={e => setBoard(processEvent(board, e))}
         />
     )
 }
