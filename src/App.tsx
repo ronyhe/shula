@@ -28,10 +28,10 @@ function createRandomExpertBoard(): Board<Cell> {
     return createRandomBoard(30, 16, 99)
 }
 
+const startBoard = createMouseBoard(createRandomExpertBoard())
+
 const App: React.FunctionComponent = () => {
-    const [board, setBoard] = React.useState(
-        createMouseBoard(createRandomExpertBoard())
-    )
+    const [board, setBoard] = React.useState(startBoard)
     return (
         <BoardComp
             board={board}
