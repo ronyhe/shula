@@ -15,8 +15,8 @@
 }
 
 :root {
-  --r3: -194px;
-  --r4: -211px;
+  --r3: -195px;
+  --r4: -212px;
   --col-diff: 17px;
   --c1: -14px;
   --c2: calc(var(--c1) - (var(--col-diff) * 1));
@@ -40,8 +40,8 @@ body {
 }
 
 .board-cell {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   background-image: url('../assets/sprite.png')
 }
 
