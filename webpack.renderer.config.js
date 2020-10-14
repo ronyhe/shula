@@ -18,6 +18,16 @@ rules.push(
                 }
             }
         ]
+    },
+    {
+        test: /\.png$/,
+        use: {
+            loader: 'file-loader',
+            options: {
+                name: '[name].[ext]',
+                outputPath: 'assets/'
+            }
+        }
     }
 )
 

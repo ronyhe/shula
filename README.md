@@ -28,3 +28,7 @@ Hebrew speakers refer to the game.
 - Add recordings and playback
 - Add different board sizes
 - Provide complete, setup-less executables for Windows, OSX and popular linux distros. 
+
+## Acknowledgments
+A huge thanks to https://www.spriters-resource.com/ for the sprite sheet used in this app.
+It can be found here: https://www.spriters-resource.com/pc_computer/minesweeper/

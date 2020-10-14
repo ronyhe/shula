@@ -1,7 +1,5 @@
 import * as React from 'react'
-import { Cell } from './Board'
 import { Coordinate } from './Grid'
-import { append } from 'ramda'
 import { MouseBoard, MouseBoardEvent, MouseCell } from './MouseBoard'
 
 interface BoardCompProps {
@@ -15,26 +13,24 @@ interface CreateCellParams {
     onEvent(event: MouseBoardEvent): void
 }
 
-function cellContent(cell: MouseCell): string {
+function extraClassForCell(cell: MouseCell): string {
     if (cell.flagged) {
-        return 'f'
+        return 'flagged'
     }
-    if (!cell.exposed) {
-        return ' '
+    if (!cell.exposed && cell.indent) {
+        return 'indent'
     }
-    if (cell.isMine) {
-        return 'x'
+    if (cell.exposed) {
+        if (cell.isMine) {
+            return 'mine'
+        }
+        return `exposed${cell.adjacentMines}`
     }
-    return cell.adjacentMines.toString()
+    return 'unexposed'
 }
 
 function getCssClassesForCell(cell: MouseCell): ReadonlyArray<string> {
-    const base = ['board-cell']
-    if (cell.indent) {
-        return append('indent', base)
-    } else {
-        return base
-    }
+    return ['board-cell', extraClassForCell(cell)]
 }
 
 function getCssClassesForCellAsString(cell: MouseCell): string {
@@ -71,9 +67,7 @@ function createCell({
                     onEvent('upRight')
                 }
             }}
-        >
-            {cellContent(cell)}
-        </td>
+        ></td>
     )
 }
 

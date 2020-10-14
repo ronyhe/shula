@@ -14,6 +14,20 @@
   url('../assets/fonts/press-start-2p-v9-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
+:root {
+  --r3: -194px;
+  --r4: -211px;
+  --col-diff: 17px;
+  --c1: -14px;
+  --c2: calc(var(--c1) - (var(--col-diff) * 1));
+  --c3: calc(var(--c1) - (var(--col-diff) * 2));
+  --c4: calc(var(--c1) - (var(--col-diff) * 3));
+  --c5: calc(var(--c1) - (var(--col-diff) * 4));
+  --c6: calc(var(--c1) - (var(--col-diff) * 5));
+  --c7: calc(var(--c1) - (var(--col-diff) * 6));
+  --c8: calc(var(--c1) - (var(--col-diff) * 7));
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin: auto;
@@ -21,18 +35,60 @@ body {
   padding: 2rem;
 }
 
-.board-cell {
-  width: 14px;
-  height: 14px;
-  border: 1px solid darkgray;
-  font-family: "Press Start 2P", cursive;
-  font-size: 10px;
-  text-align: center;
-  box-shadow: 1px 1px darkgrey;
-  background-color: lightgray;
-  user-select: none;
+.board-table {
+  border-spacing: 0;
 }
 
-.board-cell.indent {
-  box-shadow: inset 1px 1px darkgrey;
+.board-cell {
+  width: 15px;
+  height: 15px;
+  background-image: url('../assets/sprite.png')
+}
+
+.unexposed {
+  background-position: var(--c1) var(--r3);
+}
+
+.indent, .exposed0 {
+  background-position: var(--c2) var(--r3);
+}
+
+.flagged {
+  background-position: var(--c3) var(--r3);
+}
+
+.mine {
+  background-position: var(--c7) var(--r3);
+}
+
+.exposed1 {
+  background-position: var(--c1) var(--r4);
+}
+
+.exposed2 {
+  background-position: var(--c2) var(--r4);
+}
+
+.exposed3 {
+  background-position: var(--c3) var(--r4);
+}
+
+.exposed4 {
+  background-position: var(--c4) var(--r4);
+}
+
+.exposed5 {
+  background-position: var(--c5) var(--r4);
+}
+
+.exposed6 {
+  background-position: var(--c6) var(--r4);
+}
+
+.exposed7 {
+  background-position: var(--c7) var(--r4);
+}
+
+.exposed8 {
+  background-position: var(--c8) var(--r4);
 }
