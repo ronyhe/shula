@@ -58,11 +58,7 @@ describe('mouse events', () => {
 
         it('exposes on left key up', () => {
             const coordinate = { x: 1, y: 0 }
-            const exposed = {
-                ...board,
-                board: expose(coordinate, board.board)
-            }
-            const processed = processEvent(exposed, 'upLeft')
+            const processed = processEvents(board, [coordinate, 'upLeft'])
             const cell = get(coordinate, processed.board)
             expect(cell.exposed).toBe(true)
         })
