@@ -93,17 +93,6 @@ describe('mouse events', () => {
     })
 
     describe('indentation', () => {
-        it('indents exposed cells', () => {
-            const coordinate = { x: 1, y: 0 }
-            const exposed = {
-                ...board,
-                board: expose(coordinate, board.board)
-            }
-            const processed = processEvent(exposed, 'reset')
-            const cell = get(coordinate, processed.board)
-            expect(cell.indent).toBe(true)
-        })
-
         it('indents unexposed cell under mouse pointer when left key is down', () => {
             const coordinate = { x: 0, y: 0 }
             const processed = processEvents(board, [coordinate, 'downLeft'])

@@ -7,7 +7,7 @@ import {
     validForNeighborExposure
 } from './Board'
 import { Coordinate, get, getNeighborCoordinates, map, update } from './Grid'
-import { assoc, identity, ifElse, lensProp, over, prop, reduce } from 'ramda'
+import { assoc, identity, ifElse, prop, reduce } from 'ramda'
 
 interface MouseCell extends Cell {
     readonly indent: boolean
@@ -97,17 +97,6 @@ function updateMouseState(
     return assoc('pointer', event, board)
 }
 
-const indentCellIfExposed: (cell: MouseCell) => MouseCell = ifElse(
-    prop('exposed'),
-    indentCell,
-    identity
-)
-
-const indentExposedCells: (board: MouseBoard) => MouseBoard = over(
-    lensProp('board'),
-    b => map(indentCellIfExposed, b)
-)
-
 function updateFlags(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
     if (event === 'downRight' && board.pointer) {
         return {
@@ -177,8 +166,7 @@ function processEvent(board: MouseBoard, event: MouseBoardEvent): MouseBoard {
     const exposed = updateExposed(flags, event)
     const leftIndent = updateLeftButtonIndentation(exposed)
     const chordIndent = updateChordIndent(leftIndent)
-    const chord = updateChord(chordIndent, event)
-    return indentExposedCells(chord)
+    return updateChord(chordIndent, event)
 }
 
 const processEvents: (
