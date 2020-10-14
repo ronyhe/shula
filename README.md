@@ -22,7 +22,6 @@ The first word is spelled the same as the common Hebrew name, Shula, which is ho
 Hebrew speakers refer to the game.
 
 ## Next steps
-- Improve visuals and experience
 - Add basic configurations (board sizes etc)
 - Add stats
 - Add recordings and playback
