@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Board, Cell, createBoard, expose, toggleFlag } from './Board'
+import { Board, Cell, createBoard } from './Board'
 import { Coordinate } from './Grid'
 import { getRandomInt } from './utils'
 import { range } from 'ramda'

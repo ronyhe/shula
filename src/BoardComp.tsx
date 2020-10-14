@@ -67,7 +67,7 @@ function createCell({
                     onEvent('upRight')
                 }
             }}
-        ></td>
+        />
     )
 }
 
