@@ -1,4 +1,5 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
+
 declare const MAIN_WINDOW_WEBPACK_ENTRY: never
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -11,7 +12,10 @@ const createWindow = (): void => {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         height: 600,
-        width: 800
+        width: 800,
+        webPreferences: {
+            nodeIntegration: true
+        }
     })
 
     // and load the index.html of the app.
@@ -19,6 +23,37 @@ const createWindow = (): void => {
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
+
+    const menu = Menu.buildFromTemplate([
+        {
+            label: 'Menu',
+            submenu: [
+                {
+                    label: 'Beginner',
+                    click: () =>
+                        mainWindow.webContents.send('gameType', 'beginner')
+                },
+                {
+                    label: 'Intermediate',
+                    click: () =>
+                        mainWindow.webContents.send('gameType', 'intermediate')
+                },
+                {
+                    label: 'Expert',
+                    click: () =>
+                        mainWindow.webContents.send('gameType', 'expert')
+                },
+                {
+                    label: 'Refresh',
+                    click: () => {
+                        mainWindow.reload()
+                    },
+                    accelerator: 'CmdOrCtrl+R'
+                }
+            ]
+        }
+    ])
+    Menu.setApplicationMenu(menu)
 }
 
 // This method will be called when Electron has finished
