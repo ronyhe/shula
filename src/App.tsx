@@ -1,10 +1,15 @@
 import * as React from 'react'
-import { Board, Cell, createBoard } from './Board'
+import { Board, Cell, createBoard, isExploded, isSolved } from './Board'
 import { Coordinate, Grid } from './Grid'
 import { getRandomInt } from './utils'
 import { cond, equals, range } from 'ramda'
-import { BoardComp } from './BoardComp'
-import { createMouseBoard, MouseBoard, processEvent } from './MouseBoard'
+import { BoardComp, EndGame } from './BoardComp'
+import {
+    createMouseBoard,
+    MouseBoard,
+    MouseBoardEvent,
+    processEvent
+} from './MouseBoard'
 import { ipcRenderer } from 'electron'
 import { useEffect } from 'react'
 
@@ -50,6 +55,10 @@ function createBoardFromGameType(gameType: string): MouseBoard {
 
 const App: React.FunctionComponent = () => {
     const [board, setBoard] = React.useState(startBoard)
+    const endGame: EndGame = {
+        exploded: isExploded(board.board),
+        solved: isSolved(board.board)
+    }
 
     useEffect(() => {
         const cb = (_e: unknown, gameType: string) =>
@@ -60,12 +69,11 @@ const App: React.FunctionComponent = () => {
         }
     }, [])
 
-    return (
-        <BoardComp
-            board={board}
-            onEvent={e => setBoard(processEvent(board, e))}
-        />
-    )
+    const onEvent: (e: MouseBoardEvent) => void =
+        endGame.exploded || endGame.solved
+            ? () => null
+            : e => setBoard(processEvent(board, e))
+    return <BoardComp board={board} endGame={endGame} onEvent={onEvent} />
 }
 
 export default App

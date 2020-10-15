@@ -1,4 +1,14 @@
-import { assoc, filter, includes, prop, length, take, map, range } from 'ramda'
+import {
+    assoc,
+    filter,
+    includes,
+    prop,
+    length,
+    take,
+    map,
+    range,
+    reject
+} from 'ramda'
 import {
     Cell,
     toggleFlag,
@@ -20,7 +30,7 @@ import {
     CoordinateValues
 } from '../src/Grid'
 
-import { board } from './testBoard'
+import { board, minePositions } from './testBoard'
 
 describe('board functions', () => {
     describe('toggleFlag', () => {
@@ -197,6 +207,13 @@ describe('board functions', () => {
             )
             const flaggedBoard = repeat(toggleFlag, mineCoordinates, board)
             expect(isSolved(flaggedBoard)).toBe(true)
+        })
+
+        it('returns true if all the unexposed cells left are mines and the flags are correct in position and amount', () => {
+            const isMinePosition = (c: Coordinate) => includes(c, minePositions)
+            const nonMinePositions = reject(isMinePosition, coordinates(board))
+            const exposedBoard = repeat(expose, nonMinePositions, board)
+            expect(isSolved(exposedBoard)).toBe(true)
         })
     })
 })

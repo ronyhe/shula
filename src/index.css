@@ -42,6 +42,10 @@ body {
 }
 
 .mine {
+  background-position: var(--c6) var(--r3);
+}
+
+.exploded-mine {
   background-position: var(--c7) var(--r3);
 }
 

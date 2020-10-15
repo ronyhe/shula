@@ -7,8 +7,7 @@ import {
     range,
     reduce,
     any,
-    both,
-    all
+    both
 } from 'ramda'
 import {
     Coordinate,
@@ -127,13 +126,28 @@ function isExploded<C extends Cell>(board: Board<C>): boolean {
 }
 
 function isSolved<C extends Cell>(board: Board<C>): boolean {
-    const cellIsCorrect: (c: Cell) => boolean = cell => {
-        if (cell.isMine) {
-            return cell.flagged && !cell.exposed
+    let mines = 0
+    let flags = 0
+    let hidden = 0
+    for (const c of values(board)) {
+        if (c.exposed && c.isMine) {
+            return false
         }
-        return !cell.flagged
+        if (c.isMine) {
+            mines++
+        }
+        if (c.flagged) {
+            if (!c.isMine) {
+                return false
+            }
+            flags++
+        } else {
+            if (!c.exposed) {
+                hidden++
+            }
+        }
     }
-    return all(cellIsCorrect, values(board))
+    return flags === mines || (flags <= mines && hidden === mines - flags)
 }
 
 /** Expose the neighbors of an exposed cell.

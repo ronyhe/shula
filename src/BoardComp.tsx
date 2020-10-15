@@ -2,18 +2,42 @@ import * as React from 'react'
 import { Coordinate } from './Grid'
 import { MouseBoard, MouseBoardEvent, MouseCell } from './MouseBoard'
 
+interface EndGame {
+    readonly exploded: boolean
+    readonly solved: boolean
+}
+
 interface BoardCompProps {
     readonly board: MouseBoard
+    readonly endGame: EndGame
     onEvent(event: MouseBoardEvent): void
 }
 
 interface CreateCellParams {
     readonly cell: MouseCell
     readonly coordinate: Coordinate
+    readonly endGame: EndGame
     onEvent(event: MouseBoardEvent): void
 }
 
-function extraClassForCell(cell: MouseCell): string {
+function extraClassExploded(cell: MouseCell) {
+    if (cell.isMine) {
+        if (cell.exposed) {
+            return 'exploded-mine'
+        }
+        return 'flagged'
+    }
+    return `exposed${cell.adjacentMines}`
+}
+
+function extraClassSolved(cell: MouseCell) {
+    if (cell.isMine) {
+        return 'flagged'
+    }
+    return `exposed${cell.adjacentMines}`
+}
+
+function extraClassDefault(cell: MouseCell) {
     if (cell.flagged) {
         return 'flagged'
     }
@@ -29,22 +53,39 @@ function extraClassForCell(cell: MouseCell): string {
     return 'unexposed'
 }
 
-function getCssClassesForCell(cell: MouseCell): ReadonlyArray<string> {
-    return ['board-cell', extraClassForCell(cell)]
+function extraClassForCell(cell: MouseCell, endGame: EndGame): string {
+    if (endGame.solved) {
+        return extraClassSolved(cell)
+    }
+    if (endGame.exploded) {
+        return extraClassExploded(cell)
+    }
+    return extraClassDefault(cell)
 }
 
-function getCssClassesForCellAsString(cell: MouseCell): string {
-    return getCssClassesForCell(cell).join(' ')
+function getCssClassesForCell(
+    cell: MouseCell,
+    endGame: EndGame
+): ReadonlyArray<string> {
+    return ['board-cell', extraClassForCell(cell, endGame)]
+}
+
+function getCssClassesForCellAsString(
+    cell: MouseCell,
+    endGame: EndGame
+): string {
+    return getCssClassesForCell(cell, endGame).join(' ')
 }
 
 function createCell({
     cell,
     coordinate,
+    endGame,
     onEvent
 }: CreateCellParams): React.ReactFragment {
     return (
         <td
-            className={getCssClassesForCellAsString(cell)}
+            className={getCssClassesForCellAsString(cell, endGame)}
             key={JSON.stringify(coordinate)}
             onContextMenu={e => {
                 e.preventDefault()
@@ -73,6 +114,7 @@ function createCell({
 
 const BoardComp: React.FunctionComponent<BoardCompProps> = ({
     board,
+    endGame,
     onEvent
 }) => {
     return (
@@ -85,6 +127,7 @@ const BoardComp: React.FunctionComponent<BoardCompProps> = ({
                             return createCell({
                                 cell,
                                 coordinate,
+                                endGame,
                                 onEvent
                             })
                         })}
@@ -95,4 +138,4 @@ const BoardComp: React.FunctionComponent<BoardCompProps> = ({
     )
 }
 
-export { BoardComp, BoardCompProps }
+export { BoardComp, BoardCompProps, EndGame }
