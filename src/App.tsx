@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { Board, Cell, createBoard } from './Board'
-import { Coordinate } from './Grid'
+import { Coordinate, Grid } from './Grid'
 import { getRandomInt } from './utils'
-import { range } from 'ramda'
+import { cond, equals, range } from 'ramda'
 import { BoardComp } from './BoardComp'
-import { createMouseBoard, processEvent } from './MouseBoard'
+import { createMouseBoard, MouseBoard, processEvent } from './MouseBoard'
 import { ipcRenderer } from 'electron'
 import { useEffect } from 'react'
 
@@ -39,23 +39,27 @@ function createRandomExpertBoard(): Board<Cell> {
 }
 const startBoard = createMouseBoard(createRandomExpertBoard())
 
+function createBoardFromGameType(gameType: string): MouseBoard {
+    const board: Board<Cell> = cond<string, Grid<Cell>>([
+        [equals('beginner'), createRandomBeginnerBoard],
+        [equals('intermediate'), createRandomIntermediateBoard],
+        [equals('expert'), createRandomExpertBoard]
+    ])(gameType)
+    return createMouseBoard(board)
+}
+
 const App: React.FunctionComponent = () => {
     const [board, setBoard] = React.useState(startBoard)
+
     useEffect(() => {
-        const cb = (_e: unknown, gameType: string) => {
-            if (gameType === 'beginner') {
-                setBoard(createMouseBoard(createRandomBeginnerBoard()))
-            } else if (gameType === 'intermediate') {
-                setBoard(createMouseBoard(createRandomIntermediateBoard()))
-            } else {
-                setBoard(createMouseBoard(createRandomExpertBoard()))
-            }
-        }
+        const cb = (_e: unknown, gameType: string) =>
+            setBoard(createBoardFromGameType(gameType))
         ipcRenderer.on('gameType', cb)
         return () => {
             ipcRenderer.off('gameType', cb)
         }
     }, [])
+
     return (
         <BoardComp
             board={board}

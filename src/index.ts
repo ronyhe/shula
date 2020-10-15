@@ -1,4 +1,5 @@
 import { app, BrowserWindow, Menu } from 'electron'
+import { createMenu } from './menu'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: never
 
@@ -24,35 +25,7 @@ const createWindow = (): void => {
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
 
-    const menu = Menu.buildFromTemplate([
-        {
-            label: 'Menu',
-            submenu: [
-                {
-                    label: 'Beginner',
-                    click: () =>
-                        mainWindow.webContents.send('gameType', 'beginner')
-                },
-                {
-                    label: 'Intermediate',
-                    click: () =>
-                        mainWindow.webContents.send('gameType', 'intermediate')
-                },
-                {
-                    label: 'Expert',
-                    click: () =>
-                        mainWindow.webContents.send('gameType', 'expert')
-                },
-                {
-                    label: 'Refresh',
-                    click: () => {
-                        mainWindow.reload()
-                    },
-                    accelerator: 'CmdOrCtrl+R'
-                }
-            ]
-        }
-    ])
+    const menu = createMenu(mainWindow)
     Menu.setApplicationMenu(menu)
 }
 
