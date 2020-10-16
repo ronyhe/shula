@@ -1,8 +1,5 @@
 import * as React from 'react'
-import { Board, Cell, createBoard, isExploded, isSolved } from './Board'
-import { Coordinate, Grid } from './Grid'
-import { getRandomInt } from './utils'
-import { cond, equals, range } from 'ramda'
+import { Board, Cell, isExploded, isSolved } from './Board'
 import { BoardComp, EndGame } from './BoardComp'
 import {
     createMouseBoard,
@@ -12,44 +9,15 @@ import {
 } from './MouseBoard'
 import { ipcRenderer } from 'electron'
 import { useEffect } from 'react'
+import {
+    createStandardBoard,
+    createStandardBoardFromString
+} from './boardCreations'
 
-function createRandomCoordinate(width: number, height: number): Coordinate {
-    return {
-        x: getRandomInt(0, width),
-        y: getRandomInt(0, height)
-    }
-}
-
-function createRandomBoard(
-    width: number,
-    height: number,
-    mines: number
-): Board<Cell> {
-    const mineCoordinates = range(0, mines).map(() =>
-        createRandomCoordinate(width, height)
-    )
-    return createBoard(width, height, mineCoordinates)
-}
-
-function createRandomBeginnerBoard(): Board<Cell> {
-    return createRandomBoard(9, 9, 10)
-}
-
-function createRandomIntermediateBoard(): Board<Cell> {
-    return createRandomBoard(16, 16, 40)
-}
-
-function createRandomExpertBoard(): Board<Cell> {
-    return createRandomBoard(30, 16, 99)
-}
-const startBoard = createMouseBoard(createRandomExpertBoard())
+const startBoard = createMouseBoard(createStandardBoard('expert'))
 
 function createBoardFromGameType(gameType: string): MouseBoard {
-    const board: Board<Cell> = cond<string, Grid<Cell>>([
-        [equals('beginner'), createRandomBeginnerBoard],
-        [equals('intermediate'), createRandomIntermediateBoard],
-        [equals('expert'), createRandomExpertBoard]
-    ])(gameType)
+    const board: Board<Cell> = createStandardBoardFromString(gameType)
     return createMouseBoard(board)
 }
 
