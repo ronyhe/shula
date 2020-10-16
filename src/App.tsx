@@ -10,14 +10,15 @@ import {
 import { ipcRenderer } from 'electron'
 import { useEffect } from 'react'
 import {
-    createStandardBoard,
-    createStandardBoardFromString
+    createRandomBoard,
+    getStandardBoardDescriptionFromString
 } from './boardCreations'
 
-const startBoard = createMouseBoard(createStandardBoard('expert'))
+const startBoard = createBoardFromGameType('expert')
 
 function createBoardFromGameType(gameType: string): MouseBoard {
-    const board: Board<Cell> = createStandardBoardFromString(gameType)
+    const description = getStandardBoardDescriptionFromString(gameType)
+    const board: Board<Cell> = createRandomBoard(description, { x: -1, y: -1 })
     return createMouseBoard(board)
 }
 

@@ -1,7 +1,7 @@
 import { Coordinate } from './Grid'
 import { getRandomInt } from './utils'
 import { Board, Cell, createBoard } from './Board'
-import { includes, keys, range, toLower } from 'ramda'
+import { equals, includes, keys, range, toLower } from 'ramda'
 
 interface BoardDimensions {
     readonly width: number
@@ -20,34 +20,37 @@ const StandardDescriptions: Record<StandardGameType, BoardDescription> = {
     expert: { width: 30, height: 16, mines: 99 }
 }
 
-function createRandomCoordinate(width: number, height: number): Coordinate {
-    return {
+function createRandomCoordinate(
+    dimensions: BoardDimensions,
+    exclude: Coordinate
+): Coordinate {
+    const { width, height } = dimensions
+    const coordinate = {
         x: getRandomInt(0, width),
         y: getRandomInt(0, height)
     }
+    if (equals(coordinate, exclude)) {
+        return createRandomCoordinate(dimensions, exclude)
+    }
+    return coordinate
 }
 
-function createRandomBoard({
-    width,
-    height,
-    mines
-}: BoardDescription): Board<Cell> {
+function createRandomBoard(
+    { width, height, mines }: BoardDescription,
+    exclude: Coordinate
+): Board<Cell> {
     const mineCoordinates = range(0, mines).map(() =>
-        createRandomCoordinate(width, height)
+        createRandomCoordinate({ width, height }, exclude)
     )
     return createBoard(width, height, mineCoordinates)
 }
 
-function createStandardBoard(type: StandardGameType): Board<Cell> {
-    return createRandomBoard(StandardDescriptions[type])
-}
-
-function createStandardBoardFromString(name: string): Board<Cell> {
+function getStandardBoardDescriptionFromString(name: string): BoardDescription {
     const lower = toLower(name)
     if (!includes(lower, keys(StandardDescriptions))) {
         throw new Error(`${lower} is not a standard game type`)
     }
-    return createStandardBoard(lower as StandardGameType)
+    return StandardDescriptions[lower as StandardGameType]
 }
 
 export {
@@ -55,6 +58,6 @@ export {
     BoardDescription,
     StandardGameType,
     StandardDescriptions,
-    createStandardBoard,
-    createStandardBoardFromString
+    getStandardBoardDescriptionFromString,
+    createRandomBoard
 }
