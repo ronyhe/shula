@@ -6,6 +6,7 @@ import {
     resetStateToDescription,
     resetStateToGameType,
     StartState,
+    tick,
     updateState
 } from './AppBoardState'
 import { GameComp } from './GameComp'
@@ -20,6 +21,13 @@ const App: React.FunctionComponent = () => {
         return () => {
             ipcRenderer.off('gameType', cb)
         }
+    }, [])
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setState(tick)
+        }, 1000)
+        return () => clearInterval(timer)
     }, [])
 
     const onEvent = (e: MouseBoardEvent): void =>

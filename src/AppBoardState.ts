@@ -13,7 +13,7 @@ import {
 } from './boardCreations'
 import { EndGame } from './BoardComp'
 import { Board, Cell, isExploded, isSolved } from './Board'
-import { assoc } from 'ramda'
+import { assoc, inc, lensProp, over } from 'ramda'
 import { Coordinate } from './Grid'
 
 interface AppBoardState {
@@ -21,6 +21,7 @@ interface AppBoardState {
     readonly init: boolean
     readonly description: BoardDescription
     readonly endGame: EndGame
+    readonly time: number
 }
 
 const startBoard = createBoardFromGameType('expert')
@@ -29,7 +30,8 @@ const StartState: AppBoardState = {
     board: startBoard,
     init: false,
     description: StandardDescriptions.expert,
-    endGame: { exploded: false, solved: false }
+    endGame: { exploded: false, solved: false },
+    time: 0
 }
 
 function createBoardFromGameType(gameType: string): MouseBoard {
@@ -56,7 +58,8 @@ function normalUpdate(state: AppBoardState, e: MouseBoardEvent): AppBoardState {
         init: true,
         description: state.description,
         endGame: computeEndGame(board),
-        board
+        board,
+        time: state.time
     }
 }
 
@@ -69,13 +72,17 @@ function createNewBoard(state: AppBoardState, pointer: Coordinate) {
         init: true,
         description: state.description,
         board: processed,
-        endGame: computeEndGame(newBoard)
+        endGame: computeEndGame(newBoard),
+        time: 0
     }
 }
 
+function ended({ solved, exploded }: EndGame): boolean {
+    return solved || exploded
+}
+
 function updateState(state: AppBoardState, e: MouseBoardEvent): AppBoardState {
-    const alreadyEnded = state.endGame.solved || state.endGame.exploded
-    if (alreadyEnded) {
+    if (ended(state.endGame)) {
         return state
     }
     const normal = normalUpdate(state, e)
@@ -111,10 +118,18 @@ function resetStateToDescription(description: BoardDescription): AppBoardState {
     }
 }
 
+function tick(state: AppBoardState): AppBoardState {
+    if (state.init && !ended(state.endGame)) {
+        return over(lensProp('time'), inc, state)
+    }
+    return state
+}
+
 export {
     AppBoardState,
     StartState,
     updateState,
     resetStateToGameType,
-    resetStateToDescription
+    resetStateToDescription,
+    tick
 }

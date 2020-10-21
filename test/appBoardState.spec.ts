@@ -1,6 +1,7 @@
 import {
     AppBoardState,
     resetStateToGameType,
+    tick,
     updateState
 } from '../src/AppBoardState'
 import { createMouseBoard, MouseBoardEvent } from '../src/MouseBoard'
@@ -25,7 +26,8 @@ describe('appBoardState updates', () => {
             height: height(testBoard),
             mines: length(minePositions)
         },
-        endGame: { solved: false, exploded: false }
+        endGame: { solved: false, exploded: false },
+        time: 0
     }
 
     const flagAllMines: ReadonlyArray<MouseBoardEvent> = chain(
@@ -69,5 +71,17 @@ describe('appBoardState updates', () => {
         const reset = resetStateToGameType('expert')
         expect(reset.description).toBe(StandardDescriptions.expert)
         expect(reset.init).toBe(false)
+    })
+
+    it('does not increment time when not initialized', () => {
+        expect(tick(state)).toEqual(state)
+    })
+
+    it('increments time when initialized', () => {
+        const initState = assoc('init', true, state)
+        expect(tick(initState)).toEqual({
+            ...initState,
+            time: 1
+        })
     })
 })

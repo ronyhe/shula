@@ -32,7 +32,7 @@ const GameComp: React.FunctionComponent<GameCompProps> = ({
     return (
         <div className="game">
             <TopBarComp
-                seconds={999}
+                seconds={state.time}
                 smiley={smileyMode(state)}
                 mines={999}
                 onClick={onClickSmiley}
