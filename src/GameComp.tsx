@@ -3,11 +3,25 @@ import { AppBoardState } from './AppBoardState'
 import { MouseBoardEvent } from './MouseBoard'
 import { TopBarComp } from './TopBarComp'
 import { BoardComp } from './BoardComp'
+import { SmileyMode } from './SmileyComp'
 
 interface GameCompProps {
     readonly state: AppBoardState
     onEvent(e: MouseBoardEvent): void
     onClickSmiley(): void
+}
+
+function smileyMode(state: AppBoardState): SmileyMode {
+    if (state.endGame.exploded) {
+        return 'dead'
+    }
+    if (state.endGame.solved) {
+        return 'sun'
+    }
+    if (state.board.right || state.board.left) {
+        return 'surprise'
+    }
+    return 'normal'
 }
 
 const GameComp: React.FunctionComponent<GameCompProps> = ({
@@ -19,7 +33,7 @@ const GameComp: React.FunctionComponent<GameCompProps> = ({
         <div className="game">
             <TopBarComp
                 seconds={999}
-                smiley={'normal'}
+                smiley={smileyMode(state)}
                 mines={999}
                 onClick={onClickSmiley}
             />

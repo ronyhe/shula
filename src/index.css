@@ -178,6 +178,10 @@ body {
   background-image: url('../assets/sprite.png');
 }
 
+.smiley:active {
+  background-position: var(--r2c2) var(--r2);
+}
+
 .smiley-normal {
   background-position: var(--r2c1) var(--r2);
 }
