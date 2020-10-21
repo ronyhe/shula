@@ -1,7 +1,9 @@
 import * as React from 'react'
 
+type SmileyMode = 'normal' | 'indent' | 'surprise' | 'sun' | 'dead'
+
 interface SmileyCompProps {
-    readonly mode: 'normal' | 'indent' | 'surprise' | 'sun' | 'dead'
+    readonly mode: SmileyMode
     onClick(): void
 }
 
@@ -12,4 +14,4 @@ const SmileyComp: React.FunctionComponent<SmileyCompProps> = ({
     return <div className={`smiley smiley-${mode}`} onClick={onClick} />
 }
 
-export { SmileyCompProps, SmileyComp }
+export { SmileyCompProps, SmileyMode, SmileyComp }

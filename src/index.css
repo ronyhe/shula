@@ -40,6 +40,24 @@ body {
   padding: 2rem;
 }
 
+.game {
+  display: inline-block;
+  background-color: silver;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.counter-time {
+  margin-right: 5px;
+}
+
+.counter-mines {
+  margin-left: 5px;
+}
+
 .board-table {
   border-spacing: 0;
 }

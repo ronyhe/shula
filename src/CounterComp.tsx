@@ -3,13 +3,17 @@ import { clamp } from 'ramda'
 
 interface CounterCompProps {
     number: number
+    className: string
 }
 
-const Counter: React.FunctionComponent<CounterCompProps> = ({ number }) => {
+const Counter: React.FunctionComponent<CounterCompProps> = ({
+    className,
+    number
+}) => {
     const num = clamp(0, 999, number)
     const str = num.toString().padStart(3, '0').split('')
     return (
-        <div className="counter">
+        <div className={`counter ${className}`}>
             {str.map((s, i) => (
                 <div
                     key={i.toString()}
