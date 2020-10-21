@@ -77,15 +77,15 @@ function updateState(state: AppBoardState, e: MouseBoardEvent): AppBoardState {
     if (state.init) {
         return normal
     }
+    if (state.board.pointer && e === 'downRight') {
+        return normal
+    }
     if (state.board.pointer && e === 'upLeft') {
         if (normal.endGame.exploded) {
             return createNewBoard(state, state.board.pointer)
         } else {
             return normal
         }
-    }
-    if (state.board.pointer && e === 'downRight') {
-        return normal
     }
     return assoc('init', false, normal)
 }
