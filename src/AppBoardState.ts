@@ -33,7 +33,12 @@ const StartState: AppBoardState = {
 }
 
 function createBoardFromGameType(gameType: string): MouseBoard {
-    const description = getStandardBoardDescriptionFromString(gameType)
+    return createBoardFromDescription(
+        getStandardBoardDescriptionFromString(gameType)
+    )
+}
+
+function createBoardFromDescription(description: BoardDescription): MouseBoard {
     const board: Board<Cell> = createRandomBoard(description, { x: -1, y: -1 })
     return createMouseBoard(board)
 }
@@ -90,7 +95,7 @@ function updateState(state: AppBoardState, e: MouseBoardEvent): AppBoardState {
     return assoc('init', false, normal)
 }
 
-function resetState(gameType: string): AppBoardState {
+function resetStateToGameType(gameType: string): AppBoardState {
     return {
         ...StartState,
         description: getStandardBoardDescriptionFromString(gameType),
@@ -98,4 +103,18 @@ function resetState(gameType: string): AppBoardState {
     }
 }
 
-export { AppBoardState, StartState, updateState, resetState }
+function resetStateToDescription(description: BoardDescription): AppBoardState {
+    return {
+        ...StartState,
+        description,
+        board: createBoardFromDescription(description)
+    }
+}
+
+export {
+    AppBoardState,
+    StartState,
+    updateState,
+    resetStateToGameType,
+    resetStateToDescription
+}

@@ -1,4 +1,8 @@
-import { AppBoardState, resetState, updateState } from '../src/AppBoardState'
+import {
+    AppBoardState,
+    resetStateToGameType,
+    updateState
+} from '../src/AppBoardState'
 import { createMouseBoard, MouseBoardEvent } from '../src/MouseBoard'
 import { board as testBoard, minePositions } from './testBoard'
 import { height, width } from '../src/Grid'
@@ -62,7 +66,7 @@ describe('appBoardState updates', () => {
     })
 
     it('resets a state according to the provided description', () => {
-        const reset = resetState('expert')
+        const reset = resetStateToGameType('expert')
         expect(reset.description).toBe(StandardDescriptions.expert)
         expect(reset.init).toBe(false)
     })
