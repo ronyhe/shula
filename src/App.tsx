@@ -1,47 +1,24 @@
 import * as React from 'react'
-import { Board, Cell, isExploded, isSolved } from './Board'
-import { BoardComp, EndGame } from './BoardComp'
-import {
-    createMouseBoard,
-    MouseBoard,
-    MouseBoardEvent,
-    processEvent
-} from './MouseBoard'
+import { BoardComp } from './BoardComp'
+import { MouseBoardEvent } from './MouseBoard'
 import { ipcRenderer } from 'electron'
 import { useEffect } from 'react'
-import {
-    createRandomBoard,
-    getStandardBoardDescriptionFromString
-} from './boardCreations'
-
-const startBoard = createBoardFromGameType('expert')
-
-function createBoardFromGameType(gameType: string): MouseBoard {
-    const description = getStandardBoardDescriptionFromString(gameType)
-    const board: Board<Cell> = createRandomBoard(description, { x: -1, y: -1 })
-    return createMouseBoard(board)
-}
+import { resetState, StartState, updateState } from './AppBoardState'
 
 const App: React.FunctionComponent = () => {
-    const [board, setBoard] = React.useState(startBoard)
-    const endGame: EndGame = {
-        exploded: isExploded(board.board),
-        solved: isSolved(board.board)
-    }
+    const [{ board, endGame }, setState] = React.useState(StartState)
 
     useEffect(() => {
         const cb = (_e: unknown, gameType: string) =>
-            setBoard(createBoardFromGameType(gameType))
+            setState(resetState(gameType))
         ipcRenderer.on('gameType', cb)
         return () => {
             ipcRenderer.off('gameType', cb)
         }
     }, [])
 
-    const onEvent: (e: MouseBoardEvent) => void =
-        endGame.exploded || endGame.solved
-            ? () => null
-            : e => setBoard(processEvent(board, e))
+    const onEvent = (e: MouseBoardEvent): void =>
+        setState(s => updateState(s, e))
     return <BoardComp board={board} endGame={endGame} onEvent={onEvent} />
 }
 
