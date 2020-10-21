@@ -13,6 +13,8 @@ import {
 } from './boardCreations'
 import { EndGame } from './BoardComp'
 import { Board, Cell, isExploded, isSolved } from './Board'
+import { assoc } from 'ramda'
+import { Coordinate } from './Grid'
 
 interface AppBoardState {
     readonly board: MouseBoard
@@ -43,59 +45,49 @@ function computeEndGame({ board }: MouseBoard): EndGame {
     }
 }
 
+function normalUpdate(state: AppBoardState, e: MouseBoardEvent): AppBoardState {
+    const board = processEvent(state.board, e)
+    return {
+        init: true,
+        description: state.description,
+        endGame: computeEndGame(board),
+        board
+    }
+}
+
+function createNewBoard(state: AppBoardState, pointer: Coordinate) {
+    const newBoard = createMouseBoard(
+        createRandomBoard(state.description, pointer)
+    )
+    const processed = processEvents(newBoard, [pointer, 'upLeft'])
+    return {
+        init: true,
+        description: state.description,
+        board: processed,
+        endGame: computeEndGame(newBoard)
+    }
+}
+
 function updateState(state: AppBoardState, e: MouseBoardEvent): AppBoardState {
     const alreadyEnded = state.endGame.solved || state.endGame.exploded
     if (alreadyEnded) {
         return state
     }
+    const normal = normalUpdate(state, e)
     if (state.init) {
-        const board = processEvent(state.board, e)
-        return {
-            init: true,
-            description: state.description,
-            endGame: computeEndGame(board),
-            board
-        }
+        return normal
     }
     if (state.board.pointer && e === 'upLeft') {
-        const board = processEvent(state.board, e)
-        const endGame = computeEndGame(board)
-        if (endGame.exploded) {
-            const newBoard = createMouseBoard(
-                createRandomBoard(state.description, state.board.pointer)
-            )
-            const processed = processEvents(newBoard, [state.board.pointer, e])
-            return {
-                init: true,
-                description: state.description,
-                board: processed,
-                endGame: computeEndGame(newBoard)
-            }
+        if (normal.endGame.exploded) {
+            return createNewBoard(state, state.board.pointer)
         } else {
-            return {
-                init: true,
-                description: state.description,
-                endGame,
-                board
-            }
+            return normal
         }
     }
     if (state.board.pointer && e === 'downRight') {
-        const board = processEvent(state.board, e)
-        return {
-            init: true,
-            description: state.description,
-            endGame: computeEndGame(board),
-            board
-        }
+        return normal
     }
-    const board = processEvent(state.board, e)
-    return {
-        init: false,
-        description: state.description,
-        endGame: computeEndGame(board),
-        board
-    }
+    return assoc('init', false, normal)
 }
 
 function resetState(gameType: string): AppBoardState {
