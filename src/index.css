@@ -10,6 +10,27 @@
   --c6: calc(var(--c1) - (var(--col-diff) * 5));
   --c7: calc(var(--c1) - (var(--col-diff) * 6));
   --c8: calc(var(--c1) - (var(--col-diff) * 7));
+
+  --r1: -147px;
+  --r1-col-diff: 14px;
+  --r1c1: var(--c1);
+  --r1c2: calc(var(--c1) - (var(--r1-col-diff) * 1));
+  --r1c3: calc(var(--c1) - (var(--r1-col-diff) * 2));
+  --r1c4: calc(var(--c1) - (var(--r1-col-diff) * 3));
+  --r1c5: calc(var(--c1) - (var(--r1-col-diff) * 4));
+  --r1c6: calc(var(--c1) - (var(--r1-col-diff) * 5));
+  --r1c7: calc(var(--c1) - (var(--r1-col-diff) * 6));
+  --r1c8: calc(var(--c1) - (var(--r1-col-diff) * 7));
+  --r1c9: calc(var(--c1) - (var(--r1-col-diff) * 8));
+  --r1c10: calc(var(--c1) - (var(--r1-col-diff) * 9));
+
+  --r2: -170px;
+  --r2-col-diff: 25px;
+  --r2c1: var(--c1);
+  --r2c2: calc(var(--c1) - (var(--r2-col-diff) * 1));
+  --r2c3: calc(var(--c1) - (var(--r2-col-diff) * 2));
+  --r2c4: calc(var(--c1) - (var(--r2-col-diff) * 3));
+  --r2c5: calc(var(--c1) - (var(--r2-col-diff) * 4));
 }
 
 body {
@@ -79,4 +100,78 @@ body {
 
 .exposed8 {
   background-position: var(--c8) var(--r4);
+}
+
+.counter {
+  width: 42px;
+  height: 22px;
+}
+
+.counter-digit {
+  width: 14px;
+  height: 21px;
+  float: left;
+  background-image: url('../assets/sprite.png');
+}
+
+.counter-digit0 {
+  background-position: var(--r1c10) var(--r1);
+}
+
+.counter-digit1 {
+  background-position: var(--r1c1) var(--r1);
+}
+
+.counter-digit2 {
+  background-position: var(--r1c2) var(--r1);
+}
+
+.counter-digit3 {
+  background-position: var(--r1c3) var(--r1);
+}
+
+.counter-digit4 {
+  background-position: var(--r1c4) var(--r1);
+}
+
+.counter-digit5 {
+  background-position: var(--r1c5) var(--r1);
+}
+
+.counter-digit6 {
+  background-position: var(--r1c6) var(--r1);
+}
+
+.counter-digit7 {
+  background-position: var(--r1c7) var(--r1);
+}
+
+.counter-digit8 {
+  background-position: var(--r1c8) var(--r1);
+}
+
+.counter-digit9 {
+  background-position: var(--r1c9) var(--r1);
+}
+
+.smiley {
+  width: 24px;
+  height: 25px;
+  background-image: url('../assets/sprite.png');
+}
+
+.smiley-normal {
+  background-position: var(--r2c1) var(--r2);
+}
+.smiley-indent {
+  background-position: var(--r2c2) var(--r2);
+}
+.smiley-surprise {
+  background-position: var(--r2c3) var(--r2);
+}
+.smiley-sun {
+  background-position: var(--r2c4) var(--r2);
+}
+.smiley-dead {
+  background-position: var(--r2c5) var(--r2);
 }
