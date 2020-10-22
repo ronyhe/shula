@@ -4,6 +4,8 @@ import { MouseBoardEvent } from './MouseBoard'
 import { TopBarComp } from './TopBarComp'
 import { BoardComp } from './BoardComp'
 import { SmileyMode } from './SmileyComp'
+import { values } from './Grid'
+import { filter, prop, length } from 'ramda'
 
 interface GameCompProps {
     readonly state: AppBoardState
@@ -24,6 +26,12 @@ function smileyMode(state: AppBoardState): SmileyMode {
     return 'normal'
 }
 
+function mineCount(state: AppBoardState): number {
+    const flags = filter(prop('flagged'), values(state.board.board))
+    const flagCount = length(flags)
+    return state.description.mines - flagCount
+}
+
 const GameComp: React.FunctionComponent<GameCompProps> = ({
     state,
     onEvent,
@@ -34,7 +42,7 @@ const GameComp: React.FunctionComponent<GameCompProps> = ({
             <TopBarComp
                 seconds={state.time}
                 smiley={smileyMode(state)}
-                mines={999}
+                mines={mineCount(state)}
                 onClick={onClickSmiley}
             />
             <BoardComp
