@@ -42,7 +42,7 @@ body {
 
 .game {
   display: inline-block;
-  background-color: silver;
+  background-color: #C0C0C0;
 }
 
 .top-bar {
@@ -196,4 +196,35 @@ body {
 }
 .smiley-dead {
   background-position: var(--r2c5) var(--r2);
+}
+
+.indent-small {
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-bottom: 2px solid white;
+  border-right: 2px solid white;
+}
+
+.indent-big {
+  border-top: 3px solid #808080;
+  border-left: 3px solid #808080;
+  border-bottom: 3px solid white;
+  border-right: 3px solid white;
+}
+
+.full-frame {
+  display: inline-block;
+}
+
+.outer-frame {
+  border-left: 3px solid white;
+  border-top: 3px solid white;
+}
+
+.inner-frame {
+  border: 6px solid #C0C0C0;
+}
+
+.top-frame {
+  border-top: 6px solid #C0C0C0;
 }

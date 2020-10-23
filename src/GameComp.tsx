@@ -6,6 +6,7 @@ import { BoardComp } from './BoardComp'
 import { SmileyMode } from './SmileyComp'
 import { values } from './Grid'
 import { filter, prop, length } from 'ramda'
+import { FullFrame, Indent, TopFrame } from './borderComps'
 
 interface GameCompProps {
     readonly state: AppBoardState
@@ -38,19 +39,27 @@ const GameComp: React.FunctionComponent<GameCompProps> = ({
     onClickSmiley
 }) => {
     return (
-        <div className="game">
-            <TopBarComp
-                seconds={state.time}
-                smiley={smileyMode(state)}
-                mines={mineCount(state)}
-                onClick={onClickSmiley}
-            />
-            <BoardComp
-                board={state.board}
-                endGame={state.endGame}
-                onEvent={onEvent}
-            />
-        </div>
+        <FullFrame>
+            <div className="game">
+                <Indent size="small">
+                    <TopBarComp
+                        seconds={state.time}
+                        smiley={smileyMode(state)}
+                        mines={mineCount(state)}
+                        onClick={onClickSmiley}
+                    />
+                </Indent>
+                <TopFrame>
+                    <Indent size="big">
+                        <BoardComp
+                            board={state.board}
+                            endGame={state.endGame}
+                            onEvent={onEvent}
+                        />
+                    </Indent>
+                </TopFrame>
+            </div>
+        </FullFrame>
     )
 }
 
