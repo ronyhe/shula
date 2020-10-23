@@ -41,7 +41,7 @@ const GameComp: React.FunctionComponent<GameCompProps> = ({
     return (
         <FullFrame>
             <div className="game">
-                <Indent size="small">
+                <Indent size="medium">
                     <TopBarComp
                         seconds={state.time}
                         smiley={smileyMode(state)}

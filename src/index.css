@@ -48,14 +48,10 @@ body {
 .top-bar {
   display: flex;
   justify-content: space-between;
-}
-
-.counter-time {
-  margin-right: 5px;
-}
-
-.counter-mines {
-  margin-left: 5px;
+  height: 33px;
+  align-items: center;
+  padding-left: 7px;
+  padding-right: 7px;
 }
 
 .board-table {
@@ -123,12 +119,14 @@ body {
 .counter {
   width: 42px;
   height: 22px;
+  display: flex;
+  padding: 1px;
+  background-color: black;
 }
 
 .counter-digit {
   width: 14px;
   height: 21px;
-  float: left;
   background-image: url('../assets/sprite.png');
 }
 
@@ -199,6 +197,13 @@ body {
 }
 
 .indent-small {
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-bottom: 1px solid white;
+  border-right: 1px solid white;
+}
+
+.indent-medium {
   border-top: 2px solid #808080;
   border-left: 2px solid #808080;
   border-bottom: 2px solid white;

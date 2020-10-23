@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 interface IndentProps {
-    size: 'small' | 'big'
+    size: 'small' | 'medium' | 'big'
 }
 
 type FrameProps = React.PropsWithChildren<unknown>
