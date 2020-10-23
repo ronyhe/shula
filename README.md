@@ -25,7 +25,6 @@ Hebrew speakers refer to the game.
 - Add basic configurations (board sizes etc)
 - Add stats
 - Add recordings and playback
-- Add different board sizes
 - Provide complete, setup-less executables for Windows, OSX and popular linux distros. 
 
 ## Acknowledgments
