@@ -25,6 +25,7 @@ Hebrew speakers refer to the game.
 - Add custom board sizes
 - Add stats
 - Add recordings and playback
+- Publish executables (cross platform builds are already setup using github actions)
 
 ## Acknowledgments
 A huge thanks to https://www.spriters-resource.com/ for the sprite sheet used in this app.
