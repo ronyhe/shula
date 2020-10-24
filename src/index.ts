@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow, Menu, ipcMain } from 'electron'
 import { createMenu } from './menu'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: never
@@ -9,13 +9,28 @@ if (require('electron-squirrel-startup')) {
     app.quit()
 }
 
+const size = {
+    width: 498,
+    height: 317
+}
+
 const createWindow = (): void => {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        height: 600,
-        width: 800,
+        ...size,
         webPreferences: {
             nodeIntegration: true
+        },
+        useContentSize: true,
+        frame: false,
+        resizable: false
+    })
+
+    ipcMain.on('size', (e, width, height) => {
+        if (size.width !== width || size.height !== height) {
+            size.width = width
+            size.height = height
+            mainWindow.setSize(width, height)
         }
     })
 

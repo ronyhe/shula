@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { MouseBoardEvent } from './MouseBoard'
 import { ipcRenderer } from 'electron'
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 import {
     resetStateToDescription,
     resetStateToGameType,
@@ -10,6 +10,18 @@ import {
     updateState
 } from './AppBoardState'
 import { GameComp } from './GameComp'
+
+function sendSize(): void {
+    const root = document.getElementById('root')
+    if (!root) {
+        return
+    }
+    const width = root.offsetWidth
+    const height = root.offsetHeight
+    if (width > 0 && height > 0) {
+        ipcRenderer.send('size', width, height)
+    }
+}
 
 const App: React.FunctionComponent = () => {
     const [state, setState] = React.useState(StartState)
@@ -29,6 +41,8 @@ const App: React.FunctionComponent = () => {
         }, 1000)
         return () => clearInterval(timer)
     }, [])
+
+    useLayoutEffect(sendSize, [state.description])
 
     const onEvent = (e: MouseBoardEvent): void =>
         setState(s => updateState(s, e))
