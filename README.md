@@ -22,10 +22,9 @@ The first word is spelled the same as the common Hebrew name, Shula, which is ho
 Hebrew speakers refer to the game.
 
 ## Next steps
-- Add basic configurations (board sizes etc)
+- Add custom board sizes
 - Add stats
 - Add recordings and playback
-- Provide complete, setup-less executables for Windows, OSX and popular linux distros. 
 
 ## Acknowledgments
 A huge thanks to https://www.spriters-resource.com/ for the sprite sheet used in this app.
