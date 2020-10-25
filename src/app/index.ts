@@ -16,7 +16,7 @@ const size = {
 
 const createWindow = (): void => {
     // Create the browser window.
-    const mainWindow = new BrowserWindow({
+    const win = new BrowserWindow({
         ...size,
         webPreferences: {
             nodeIntegration: true
@@ -30,23 +30,23 @@ const createWindow = (): void => {
         if (size.width !== width || size.height !== height) {
             size.width = width
             size.height = height
-            mainWindow.setSize(width, height)
+            win.setSize(width, height)
         }
     })
 
     // and load the index.html of the app.
-    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+    win.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
     // Open the DevTools.
     if ((process.env.SHULA ?? '').toLowerCase() === 'dev') {
-        mainWindow.webContents.openDevTools()
+        win.webContents.openDevTools()
     }
 
-    const menu = createMenu(mainWindow, app, process.platform === 'darwin')
+    const menu = createMenu(win, app, process.platform === 'darwin')
     Menu.setApplicationMenu(menu)
 
     globalShortcut.register('F2', () => {
-        mainWindow.webContents.send('newGame')
+        win.webContents.send('newGame')
     })
 }
 
