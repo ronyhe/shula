@@ -47,9 +47,16 @@ const App: React.FunctionComponent = () => {
     const onEvent = (e: MouseBoardEvent): void =>
         setState(s => updateState(s, e))
 
-    const onClick = () => setState(s => resetStateToDescription(s.description))
+    const onClickSmiley = () =>
+        setState(s => resetStateToDescription(s.description))
 
-    return <GameComp state={state} onEvent={onEvent} onClickSmiley={onClick} />
+    return (
+        <GameComp
+            state={state}
+            onEvent={onEvent}
+            onClickSmiley={onClickSmiley}
+        />
+    )
 }
 
 export default App
