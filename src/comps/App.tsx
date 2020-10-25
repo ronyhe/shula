@@ -36,6 +36,16 @@ const App: React.FunctionComponent = () => {
     }, [])
 
     useEffect(() => {
+        const cb = () =>
+            setState(s => resetStateToDescription(s, s.description))
+
+        ipcRenderer.on('newGame', cb)
+        return () => {
+            ipcRenderer.off('newGame', cb)
+        }
+    }, [])
+
+    useEffect(() => {
         const timer = setInterval(() => {
             setState(tick)
         }, 1000)
@@ -48,7 +58,7 @@ const App: React.FunctionComponent = () => {
         setState(s => updateState(s, e))
 
     const onClickSmiley = () =>
-        setState(s => resetStateToDescription(s.description))
+        setState(s => resetStateToDescription(s, s.description))
 
     return (
         <GameComp

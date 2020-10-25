@@ -110,12 +110,20 @@ function resetStateToGameType(gameType: string): GameState {
     }
 }
 
-function resetStateToDescription(description: BoardDescription): GameState {
-    return {
+function resetStateToDescription(
+    state: GameState,
+    description: BoardDescription
+): GameState {
+    const newState = {
         ...StartState,
         description,
         board: createBoardFromDescription(description)
     }
+    const pointer = state.board.pointer
+    if (pointer) {
+        return updateState(newState, pointer)
+    }
+    return newState
 }
 
 function tick(state: GameState): GameState {
