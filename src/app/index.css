@@ -68,7 +68,7 @@ body {
   height: 14px;
   min-width: 14px;
   min-height: 14px;
-  background-image: url('../assets/sprite.png')
+  background-image: url('../../assets/sprite.png')
 }
 
 .unexposed {
@@ -134,7 +134,7 @@ body {
 .counter-digit {
   width: 14px;
   height: 21px;
-  background-image: url('../assets/sprite.png');
+  background-image: url('../../assets/sprite.png');
 }
 
 .counter-digit0 {
@@ -181,7 +181,7 @@ body {
   -webkit-app-region: no-drag;
   width: 24px;
   height: 25px;
-  background-image: url('../assets/sprite.png');
+  background-image: url('../../assets/sprite.png');
 }
 
 .smiley:active {
