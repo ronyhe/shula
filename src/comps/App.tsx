@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { MouseBoardEvent } from './MouseBoard'
+import { MouseBoardEvent } from '../MouseBoard'
 import { ipcRenderer } from 'electron'
 import { useEffect, useLayoutEffect } from 'react'
 import {
@@ -8,7 +8,7 @@ import {
     StartState,
     tick,
     updateState
-} from './GameState'
+} from '../GameState'
 import { GameComp } from './GameComp'
 
 function sendSize(): void {

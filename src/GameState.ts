@@ -11,7 +11,7 @@ import {
     getStandardBoardDescriptionFromString,
     StandardDescriptions
 } from './boardCreations'
-import { EndGame } from './BoardComp'
+import { EndGame } from './comps/BoardComp'
 import { Board, Cell, isExploded, isSolved } from './Board'
 import { assoc, inc, lensProp, over } from 'ramda'
 import { Coordinate } from './Grid'

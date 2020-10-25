@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Coordinate } from './Grid'
-import { MouseBoard, MouseBoardEvent, MouseCell } from './MouseBoard'
+import { Coordinate } from '../Grid'
+import { MouseBoard, MouseBoardEvent, MouseCell } from '../MouseBoard'
 
 interface EndGame {
     readonly exploded: boolean
