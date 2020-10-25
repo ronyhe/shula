@@ -229,11 +229,6 @@ body {
   display: inline-block;
 }
 
-.outer-frame {
-  /*border-left: 3px solid white;*/
-  /*border-top: 3px solid white;*/
-}
-
 .inner-frame {
   border: 6px solid #C0C0C0;
 }

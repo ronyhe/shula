@@ -11,11 +11,7 @@ const Indent: React.FunctionComponent<IndentProps> = ({ size, children }) => {
 }
 
 const FullFrame: React.FunctionComponent<FrameProps> = ({ children }) => {
-    return (
-        <div className="full-frame outer-frame">
-            <div className="full-frame inner-frame">{children}</div>
-        </div>
-    )
+    return <div className="full-frame inner-frame">{children}</div>
 }
 
 const TopFrame: React.FunctionComponent<FrameProps> = ({ children }) => {
