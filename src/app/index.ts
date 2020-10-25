@@ -42,7 +42,7 @@ const createWindow = (): void => {
         mainWindow.webContents.openDevTools()
     }
 
-    const menu = createMenu(mainWindow)
+    const menu = createMenu(mainWindow, app, process.platform === 'darwin')
     Menu.setApplicationMenu(menu)
 }
 

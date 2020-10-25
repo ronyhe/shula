@@ -1,6 +1,6 @@
-import { BrowserWindow, Menu } from 'electron'
+import { App, BrowserWindow, Menu } from 'electron'
 
-function createMenu(win: BrowserWindow): Menu {
+function createMenu(win: BrowserWindow, app: App, isMac: boolean): Menu {
     return Menu.buildFromTemplate([
         {
             label: 'Menu',
@@ -19,6 +19,13 @@ function createMenu(win: BrowserWindow): Menu {
                     click: () => win.webContents.send('gameType', 'expert')
                 },
                 {
+                    label: 'Open DevTools',
+                    click: () => {
+                        win.webContents.openDevTools()
+                    },
+                    accelerator: 'F12'
+                },
+                {
                     label: 'Refresh',
                     click: () => {
                         win.reload()
@@ -26,11 +33,11 @@ function createMenu(win: BrowserWindow): Menu {
                     accelerator: 'CmdOrCtrl+R'
                 },
                 {
-                    label: 'Open DevTools',
+                    label: 'Quit',
                     click: () => {
-                        win.webContents.openDevTools()
+                        app.quit()
                     },
-                    accelerator: 'F12'
+                    accelerator: isMac ? 'Cmd+Q' : 'Alt+F4'
                 }
             ]
         }
