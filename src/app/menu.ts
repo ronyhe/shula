@@ -24,6 +24,13 @@ function createMenu(win: BrowserWindow): Menu {
                         win.reload()
                     },
                     accelerator: 'CmdOrCtrl+R'
+                },
+                {
+                    label: 'Open DevTools',
+                    click: () => {
+                        win.webContents.openDevTools()
+                    },
+                    accelerator: 'F12'
                 }
             ]
         }
