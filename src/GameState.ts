@@ -16,7 +16,7 @@ import { Board, Cell, isExploded, isSolved } from './Board'
 import { assoc, inc, lensProp, over } from 'ramda'
 import { Coordinate } from './Grid'
 
-interface AppBoardState {
+interface GameState {
     readonly board: MouseBoard
     readonly init: boolean
     readonly description: BoardDescription
@@ -26,7 +26,7 @@ interface AppBoardState {
 
 const startBoard = createBoardFromGameType('expert')
 
-const StartState: AppBoardState = {
+const StartState: GameState = {
     board: startBoard,
     init: false,
     description: StandardDescriptions.expert,
@@ -52,7 +52,7 @@ function computeEndGame({ board }: MouseBoard): EndGame {
     }
 }
 
-function normalUpdate(state: AppBoardState, e: MouseBoardEvent): AppBoardState {
+function normalUpdate(state: GameState, e: MouseBoardEvent): GameState {
     const board = processEvent(state.board, e)
     return {
         init: true,
@@ -63,7 +63,7 @@ function normalUpdate(state: AppBoardState, e: MouseBoardEvent): AppBoardState {
     }
 }
 
-function createNewBoard(state: AppBoardState, pointer: Coordinate) {
+function createNewBoard(state: GameState, pointer: Coordinate) {
     const newBoard = createMouseBoard(
         createRandomBoard(state.description, pointer)
     )
@@ -81,7 +81,7 @@ function ended({ solved, exploded }: EndGame): boolean {
     return solved || exploded
 }
 
-function updateState(state: AppBoardState, e: MouseBoardEvent): AppBoardState {
+function updateState(state: GameState, e: MouseBoardEvent): GameState {
     if (ended(state.endGame)) {
         return state
     }
@@ -102,7 +102,7 @@ function updateState(state: AppBoardState, e: MouseBoardEvent): AppBoardState {
     return assoc('init', false, normal)
 }
 
-function resetStateToGameType(gameType: string): AppBoardState {
+function resetStateToGameType(gameType: string): GameState {
     return {
         ...StartState,
         description: getStandardBoardDescriptionFromString(gameType),
@@ -110,7 +110,7 @@ function resetStateToGameType(gameType: string): AppBoardState {
     }
 }
 
-function resetStateToDescription(description: BoardDescription): AppBoardState {
+function resetStateToDescription(description: BoardDescription): GameState {
     return {
         ...StartState,
         description,
@@ -118,7 +118,7 @@ function resetStateToDescription(description: BoardDescription): AppBoardState {
     }
 }
 
-function tick(state: AppBoardState): AppBoardState {
+function tick(state: GameState): GameState {
     if (state.init && !ended(state.endGame)) {
         return over(lensProp('time'), inc, state)
     }
@@ -126,7 +126,7 @@ function tick(state: AppBoardState): AppBoardState {
 }
 
 export {
-    AppBoardState,
+    GameState,
     StartState,
     updateState,
     resetStateToGameType,

@@ -1,9 +1,9 @@
 import {
-    AppBoardState,
+    GameState,
     resetStateToGameType,
     tick,
     updateState
-} from '../src/AppBoardState'
+} from '../src/GameState'
 import { createMouseBoard, MouseBoardEvent } from '../src/MouseBoard'
 import { board as testBoard, minePositions } from './testBoard'
 import { height, width } from '../src/Grid'
@@ -11,14 +11,14 @@ import { reduce, length, assoc, chain } from 'ramda'
 import { StandardDescriptions } from '../src/boardCreations'
 
 function processEvents(
-    state: AppBoardState,
+    state: GameState,
     events: ReadonlyArray<MouseBoardEvent>
-): AppBoardState {
+): GameState {
     return reduce(updateState, state, events)
 }
 
 describe('appBoardState updates', () => {
-    const state: AppBoardState = {
+    const state: GameState = {
         board: createMouseBoard(testBoard),
         init: false,
         description: {

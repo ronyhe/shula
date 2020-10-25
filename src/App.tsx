@@ -8,7 +8,7 @@ import {
     StartState,
     tick,
     updateState
-} from './AppBoardState'
+} from './GameState'
 import { GameComp } from './GameComp'
 
 function sendSize(): void {

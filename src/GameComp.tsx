@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { AppBoardState } from './AppBoardState'
+import { GameState } from './GameState'
 import { MouseBoardEvent } from './MouseBoard'
 import { TopBarComp } from './TopBarComp'
 import { BoardComp } from './BoardComp'
@@ -9,12 +9,12 @@ import { filter, prop, length } from 'ramda'
 import { FullFrame, Indent, TopFrame } from './borderComps'
 
 interface GameCompProps {
-    readonly state: AppBoardState
+    readonly state: GameState
     onEvent(e: MouseBoardEvent): void
     onClickSmiley(): void
 }
 
-function smileyMode(state: AppBoardState): SmileyMode {
+function smileyMode(state: GameState): SmileyMode {
     if (state.endGame.exploded) {
         return 'dead'
     }
@@ -27,7 +27,7 @@ function smileyMode(state: AppBoardState): SmileyMode {
     return 'normal'
 }
 
-function mineCount(state: AppBoardState): number {
+function mineCount(state: GameState): number {
     const flags = filter(prop('flagged'), values(state.board.board))
     const flagCount = length(flags)
     return state.description.mines - flagCount
