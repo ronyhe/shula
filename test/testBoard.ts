@@ -1,5 +1,5 @@
-import { Board, Cell, createBoard } from '../src/Board'
-import { Coordinate } from '../src/Grid'
+import { Board, Cell, createBoard } from '../src/logic/Board'
+import { Coordinate } from '../src/logic/Grid'
 
 const minePositions: ReadonlyArray<Coordinate> = [
     { x: 0, y: 0 },

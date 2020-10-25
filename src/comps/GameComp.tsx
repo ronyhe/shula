@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { GameState } from '../GameState'
-import { MouseBoardEvent } from '../MouseBoard'
+import { GameState } from '../logic/GameState'
+import { MouseBoardEvent } from '../logic/MouseBoard'
 import { TopBarComp } from './TopBarComp'
 import { BoardComp } from './BoardComp'
 import { SmileyMode } from './SmileyComp'
-import { values } from '../Grid'
+import { values } from '../logic/Grid'
 import { filter, prop, length } from 'ramda'
 import { FullFrame, Indent, TopFrame } from './borderComps'
 

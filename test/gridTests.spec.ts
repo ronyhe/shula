@@ -9,7 +9,7 @@ import {
     set,
     update,
     values
-} from '../src/Grid'
+} from '../src/logic/Grid'
 import { unnest } from 'ramda'
 
 describe('Grid', () => {

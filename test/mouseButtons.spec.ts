@@ -1,4 +1,4 @@
-import { isLeftClicked, isRightClicked } from '../src/mouseButtons'
+import { isLeftClicked, isRightClicked } from '../src/logic/mouseButtons'
 
 describe('bit mask parsing', () => {
     it('works as expected for the foreseeable values', () => {

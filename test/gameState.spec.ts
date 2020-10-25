@@ -3,12 +3,12 @@ import {
     resetStateToGameType,
     tick,
     updateState
-} from '../src/GameState'
-import { createMouseBoard, MouseBoardEvent } from '../src/MouseBoard'
+} from '../src/logic/GameState'
+import { createMouseBoard, MouseBoardEvent } from '../src/logic/MouseBoard'
 import { board as testBoard, minePositions } from './testBoard'
-import { height, width } from '../src/Grid'
+import { height, width } from '../src/logic/Grid'
 import { reduce, length, assoc, chain } from 'ramda'
-import { StandardDescriptions } from '../src/boardCreations'
+import { StandardDescriptions } from '../src/logic/boardCreations'
 
 function processEvents(
     state: GameState,

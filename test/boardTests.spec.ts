@@ -18,7 +18,7 @@ import {
     Board,
     exposeNeighbors,
     repeat
-} from '../src/Board'
+} from '../src/logic/Board'
 import {
     forEach,
     Coordinate,
@@ -28,7 +28,7 @@ import {
     coordinates,
     valuesAndCoordinates,
     CoordinateValues
-} from '../src/Grid'
+} from '../src/logic/Grid'
 
 import { board, minePositions } from './testBoard'
 

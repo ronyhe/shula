@@ -1,5 +1,12 @@
-import { Cell } from '../src/Board'
-import { Coordinate, forEach, Grid, height, map, width } from '../src/Grid'
+import { Cell } from '../src/logic/Board'
+import {
+    Coordinate,
+    forEach,
+    Grid,
+    height,
+    map,
+    width
+} from '../src/logic/Grid'
 import { includes, prop } from 'ramda'
 import { board, minePositions } from './testBoard'
 

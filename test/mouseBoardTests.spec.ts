@@ -4,11 +4,11 @@ import {
     MouseBoardEvent,
     processEvent,
     processEvents
-} from '../src/MouseBoard'
+} from '../src/logic/MouseBoard'
 import { board as testBoard } from './testBoard'
 import { always, assoc, curry, evolve, T } from 'ramda'
-import { expose, toggleFlag } from '../src/Board'
-import { get, getNeighborCoordinates } from '../src/Grid'
+import { expose, toggleFlag } from '../src/logic/Board'
+import { get, getNeighborCoordinates } from '../src/logic/Grid'
 
 const board = createMouseBoard(testBoard)
 
