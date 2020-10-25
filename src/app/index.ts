@@ -38,7 +38,9 @@ const createWindow = (): void => {
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools()
+    if ((process.env.SHULA ?? '').toLowerCase() === 'dev') {
+        mainWindow.webContents.openDevTools()
+    }
 
     const menu = createMenu(mainWindow)
     Menu.setApplicationMenu(menu)
