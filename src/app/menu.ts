@@ -1,6 +1,12 @@
 import { App, BrowserWindow, Menu } from 'electron'
 
-function createMenu(win: BrowserWindow, app: App, isMac: boolean): Menu {
+interface MenuParams {
+    readonly win: BrowserWindow
+    readonly app: App
+    readonly isMac: boolean
+}
+
+function createMenu({ win, app, isMac }: MenuParams): Menu {
     return Menu.buildFromTemplate([
         {
             label: 'Menu',
@@ -44,4 +50,4 @@ function createMenu(win: BrowserWindow, app: App, isMac: boolean): Menu {
     ])
 }
 
-export { createMenu }
+export { MenuParams, createMenu }

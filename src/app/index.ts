@@ -9,6 +9,8 @@ if (require('electron-squirrel-startup')) {
     app.quit()
 }
 
+const isMac: boolean = process.platform === 'darwin'
+
 const size = {
     width: 498,
     height: 317
@@ -42,7 +44,7 @@ const createWindow = (): void => {
         win.webContents.openDevTools()
     }
 
-    const menu = createMenu(win, app, process.platform === 'darwin')
+    const menu = createMenu({ win, app, isMac })
     Menu.setApplicationMenu(menu)
 
     globalShortcut.register('F2', () => {
@@ -59,7 +61,7 @@ app.on('ready', createWindow)
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+    if (isMac) {
         app.quit()
     }
 })
