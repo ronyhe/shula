@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, ipcMain, globalShortcut } from 'electron'
+import { app, BrowserWindow, Menu, ipcMain } from 'electron'
 import { createMenu } from './menu'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: never
@@ -46,10 +46,6 @@ const createWindow = (): void => {
 
     const menu = createMenu({ win, app, isMac })
     Menu.setApplicationMenu(menu)
-
-    globalShortcut.register('F2', () => {
-        win.webContents.send('newGame')
-    })
 }
 
 // This method will be called when Electron has finished

@@ -25,6 +25,12 @@ function createMenu({ win, app, isMac }: MenuParams): Menu {
                     click: () => win.webContents.send('gameType', 'expert')
                 },
                 {
+                    label: 'New Game',
+                    click: () => win.webContents.send('newGame'),
+                    accelerator: 'F2'
+                },
+                { type: 'separator' },
+                {
                     label: 'Open DevTools',
                     click: () => {
                         win.webContents.openDevTools()
