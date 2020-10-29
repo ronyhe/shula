@@ -12,9 +12,13 @@ import {
     StandardDescriptions
 } from './boardCreations'
 import { EndGame } from '../comps/BoardComp'
-import { Board, Cell, isExploded, isSolved } from './Board'
+import { isExploded, isSolved } from './Board'
 import { assoc, inc, lensProp, over } from 'ramda'
 import { Coordinate } from './Grid'
+import {
+    createBoardFromDescription,
+    createBoardFromGameType
+} from './mouseBoardCreations'
 
 interface GameState {
     readonly board: MouseBoard
@@ -32,17 +36,6 @@ const StartState: GameState = {
     description: StandardDescriptions.expert,
     endGame: { exploded: false, solved: false },
     time: 0
-}
-
-function createBoardFromGameType(gameType: string): MouseBoard {
-    return createBoardFromDescription(
-        getStandardBoardDescriptionFromString(gameType)
-    )
-}
-
-function createBoardFromDescription(description: BoardDescription): MouseBoard {
-    const board: Board<Cell> = createRandomBoard(description, { x: -1, y: -1 })
-    return createMouseBoard(board)
 }
 
 function computeEndGame({ board }: MouseBoard): EndGame {
