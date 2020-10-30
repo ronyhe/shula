@@ -132,5 +132,6 @@ export {
     updateState,
     resetStateToGameType,
     resetStateToDescription,
-    tick
+    tick,
+    ended
 }
