@@ -23,7 +23,11 @@ function sendSize(): void {
     }
 }
 
-const App: React.FunctionComponent = () => {
+interface AppParams {
+    readonly mediaSourceId: string
+}
+
+const App: React.FunctionComponent<AppParams> = () => {
     const [state, setState] = React.useState(StartState)
 
     useEffect(() => {

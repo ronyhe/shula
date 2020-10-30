@@ -37,7 +37,9 @@ const createWindow = (): void => {
     })
 
     // and load the index.html of the app.
-    win.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+    win.loadURL(
+        `${MAIN_WINDOW_WEBPACK_ENTRY}?mediaSourceId=${win.getMediaSourceId()}`
+    )
 
     // Open the DevTools.
     if ((process.env.SHULA ?? '').toLowerCase() === 'dev') {
