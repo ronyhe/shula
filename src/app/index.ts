@@ -21,7 +21,8 @@ const createWindow = (): void => {
     const win = new BrowserWindow({
         ...size,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            enableRemoteModule: true
         },
         useContentSize: true,
         frame: false,
