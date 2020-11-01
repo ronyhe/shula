@@ -1,28 +1,35 @@
 import { App, BrowserWindow, Menu } from 'electron'
+import Store from 'electron-store'
 
 interface MenuParams {
     readonly win: BrowserWindow
     readonly app: App
     readonly isMac: boolean
+    readonly store: Store<Record<string, string>>
 }
 
-function createMenu({ win, app, isMac }: MenuParams): Menu {
+function sendGameType(gameType: string, { store, win }: MenuParams): void {
+    win.webContents.send('gameType', gameType)
+    store.set('gameType', gameType)
+}
+
+function createMenu(menuParams: MenuParams): Menu {
+    const { win, app, isMac } = menuParams
     return Menu.buildFromTemplate([
         {
             label: 'Menu',
             submenu: [
                 {
                     label: 'Beginner',
-                    click: () => win.webContents.send('gameType', 'beginner')
+                    click: () => sendGameType('beginner', menuParams)
                 },
                 {
                     label: 'Intermediate',
-                    click: () =>
-                        win.webContents.send('gameType', 'intermediate')
+                    click: () => sendGameType('intermediate', menuParams)
                 },
                 {
                     label: 'Expert',
-                    click: () => win.webContents.send('gameType', 'expert')
+                    click: () => sendGameType('expert', menuParams)
                 },
                 {
                     label: 'New Game',

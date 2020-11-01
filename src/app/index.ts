@@ -1,5 +1,6 @@
 import { app, BrowserWindow, Menu, ipcMain } from 'electron'
 import { createMenu } from './menu'
+import Store from 'electron-store'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: never
 
@@ -37,9 +38,16 @@ const createWindow = (): void => {
         }
     })
 
-    // and load the index.html of the app.
+    const store = new Store<Record<string, string>>()
+    const gameType = store.get('gameType')
+    const url = new URL(MAIN_WINDOW_WEBPACK_ENTRY)
+    url.searchParams.append('mediaSourceId', win.getMediaSourceId())
+    if (gameType) {
+        url.searchParams.append('gameType', gameType)
+    }
     win.loadURL(
-        `${MAIN_WINDOW_WEBPACK_ENTRY}?mediaSourceId=${win.getMediaSourceId()}`
+        // and load the index.html of the app.
+        url.toString()
     )
 
     // Open the DevTools.
@@ -47,7 +55,7 @@ const createWindow = (): void => {
         win.webContents.openDevTools()
     }
 
-    const menu = createMenu({ win, app, isMac })
+    const menu = createMenu({ win, app, isMac, store })
     Menu.setApplicationMenu(menu)
 }
 

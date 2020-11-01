@@ -8,6 +8,7 @@ import { Video } from './Video'
 
 interface AppParams {
     readonly mediaSourceId: string
+    readonly initialGameType: string
 }
 
 async function getMediaStream(mediaSourceId: string): Promise<MediaStream> {
@@ -44,7 +45,10 @@ async function saveFile(video: Video): Promise<void> {
     }
 }
 
-const App: React.FunctionComponent<AppParams> = ({ mediaSourceId }) => {
+const App: React.FunctionComponent<AppParams> = ({
+    mediaSourceId,
+    initialGameType
+}) => {
     const stream = useResource(() => getMediaStream(mediaSourceId))
     if (stream === 'processing') {
         return <div>Loading...</div>
@@ -66,7 +70,13 @@ const App: React.FunctionComponent<AppParams> = ({ mediaSourceId }) => {
             video.stop()
         }
     }
-    return <GameWithStateComp onInit={onInit} onFinish={onFinish} />
+    return (
+        <GameWithStateComp
+            onInit={onInit}
+            onFinish={onFinish}
+            initialGameType={initialGameType}
+        />
+    )
 }
 
 export default App

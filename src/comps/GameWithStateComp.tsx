@@ -4,7 +4,6 @@ import {
     GameState,
     resetStateToDescription,
     resetStateToGameType,
-    StartState,
     tick,
     updateState
 } from '../logic/GameState'
@@ -14,6 +13,7 @@ import { MouseBoardEvent } from '../logic/MouseBoard'
 import { GameComp } from './GameComp'
 
 interface GameWithStateCompProps {
+    readonly initialGameType: string
     onInit(): void
     onFinish(solved: boolean): void
 }
@@ -32,9 +32,12 @@ function sendSize(): void {
 
 const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
     onInit,
-    onFinish
+    onFinish,
+    initialGameType
 }) => {
-    const [state, setStateFromReact] = React.useState(StartState)
+    const [state, setStateFromReact] = React.useState(() =>
+        resetStateToGameType(initialGameType)
+    )
 
     const setState = (f: (s: GameState) => GameState): void => {
         setStateFromReact(s => {
