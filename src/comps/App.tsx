@@ -4,7 +4,7 @@ import { useResource } from './hooks'
 import { head } from 'ramda'
 import { desktopCapturer, remote } from 'electron'
 import fs from 'fs'
-import { Video } from './Video'
+import { Video } from '../app/Video'
 
 interface AppParams {
     readonly mediaSourceId: string
