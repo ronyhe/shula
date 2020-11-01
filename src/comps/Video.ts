@@ -17,7 +17,7 @@ class Video {
     stop(): Promise<Blob> {
         const { mr, nullifyMr } = this
         if (!mr) {
-            throw new Error('Cannot stop un- started video')
+            throw new Error('Cannot stop un-started video')
         }
         const reset = nullifyMr.bind(this)
         return new Promise<Blob>(resolve => {
