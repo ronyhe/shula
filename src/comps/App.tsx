@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { GameWithStateComp } from './GameWithStateComp'
 import { useResource } from './hooks'
-import { head, isEmpty } from 'ramda'
+import { head } from 'ramda'
 import { desktopCapturer, remote } from 'electron'
 import fs from 'fs'
 import { Video } from './Video'
