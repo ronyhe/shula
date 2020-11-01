@@ -61,15 +61,14 @@ async function getMediaStream(mediaSourceId: string): Promise<MediaStream> {
     })
 }
 
-async function saveFile(video: Video): Promise<void> {
-    const blob = await video.stop()
+async function saveFile(data: Blob): Promise<void> {
     const saveDialogReturnValue = await remote.dialog.showSaveDialog({
         title: 'Save Shula Game'
     })
     if (saveDialogReturnValue.filePath) {
         await fs.promises.writeFile(
             saveDialogReturnValue.filePath,
-            Buffer.from(await blob.arrayBuffer())
+            Buffer.from(await data.arrayBuffer())
         )
     }
 }

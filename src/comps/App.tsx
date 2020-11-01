@@ -8,6 +8,16 @@ interface AppParams {
     readonly initialGameType: string
 }
 
+async function stopVideoAndSaveFile(
+    video: Video,
+    solved: boolean
+): Promise<void> {
+    const blob = await video.stop()
+    if (solved) {
+        await saveFile(blob)
+    }
+}
+
 const App: React.FunctionComponent<AppParams> = ({
     mediaSourceId,
     initialGameType
@@ -25,13 +35,10 @@ const App: React.FunctionComponent<AppParams> = ({
         video.start()
     }
     const onFinish = (solved: boolean) => {
-        if (solved) {
-            saveFile(video)
-                .then(() => console.log('done'))
-                .catch(e => console.error(e))
-        } else {
-            video.stop()
-        }
+        stopVideoAndSaveFile(video, solved).catch(e => {
+            console.error(e)
+            alert(`Unable to save video: ${e.message}`)
+        })
     }
     return (
         <GameWithStateComp
