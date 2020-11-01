@@ -61,9 +61,16 @@ async function getMediaStream(mediaSourceId: string): Promise<MediaStream> {
     })
 }
 
-async function saveFile(data: Blob): Promise<void> {
+function createFileName(elapsedTimeMillis: number): string {
+    const seconds = Math.floor(elapsedTimeMillis / 1000)
+    const millis = Math.floor(elapsedTimeMillis % 1000)
+    return `Shula_${seconds}s${millis}ms.webm`
+}
+
+async function saveFile(data: Blob, elapsedTimeMillis: number): Promise<void> {
     const saveDialogReturnValue = await remote.dialog.showSaveDialog({
-        title: 'Save Shula Game'
+        title: 'Save Shula Game',
+        defaultPath: createFileName(elapsedTimeMillis)
     })
     if (saveDialogReturnValue.filePath) {
         await fs.promises.writeFile(

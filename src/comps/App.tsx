@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { GameWithStateComp } from './GameWithStateComp'
+import { GameResult, GameWithStateComp } from './GameWithStateComp'
 import { useResource } from './hooks'
 import { Video, getMediaStream, saveFile } from '../app/Video'
 
@@ -10,11 +10,11 @@ interface AppParams {
 
 async function stopVideoAndSaveFile(
     video: Video,
-    solved: boolean
+    gameResult: GameResult
 ): Promise<void> {
     const blob = await video.stop()
-    if (solved) {
-        await saveFile(blob)
+    if (gameResult.solved) {
+        await saveFile(blob, gameResult.elapsedTimeMillis)
     }
 }
 
@@ -34,8 +34,8 @@ const App: React.FunctionComponent<AppParams> = ({
     const onInit = () => {
         video.start()
     }
-    const onFinish = (solved: boolean) => {
-        stopVideoAndSaveFile(video, solved).catch(e => {
+    const onFinish = (gameResult: GameResult) => {
+        stopVideoAndSaveFile(video, gameResult).catch(e => {
             console.error(e)
             alert(`Unable to save video: ${e.message}`)
         })

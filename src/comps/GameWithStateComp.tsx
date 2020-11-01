@@ -12,10 +12,15 @@ import { ipcRenderer } from 'electron'
 import { MouseBoardEvent } from '../logic/MouseBoard'
 import { GameComp } from './GameComp'
 
+interface GameResult {
+    readonly solved: boolean
+    readonly elapsedTimeMillis: number
+}
+
 interface GameWithStateCompProps {
     readonly initialGameType: string
     onInit(): void
-    onFinish(solved: boolean): void
+    onFinish(gameResult: GameResult): void
 }
 
 function sendSize(): void {
@@ -30,25 +35,42 @@ function sendSize(): void {
     }
 }
 
+interface CompState {
+    readonly gameState: GameState
+    readonly startTime: number
+}
+
 const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
     onInit,
     onFinish,
     initialGameType
 }) => {
-    const [state, setStateFromReact] = React.useState(() =>
-        resetStateToGameType(initialGameType)
-    )
+    const [compState, setCompState] = React.useState<CompState>(() => ({
+        startTime: 0,
+        gameState: resetStateToGameType(initialGameType)
+    }))
+    const gameState = compState.gameState
 
     const setState = (f: (s: GameState) => GameState): void => {
-        setStateFromReact(s => {
-            const newState = f(s)
-            if (!s.init && newState.init) {
+        setCompState(({ gameState: oldGameState, startTime }) => {
+            const newGameState = f(oldGameState)
+            if (!oldGameState.init && newGameState.init) {
                 onInit()
+                return {
+                    gameState: newGameState,
+                    startTime: performance.now()
+                }
             }
-            if (!ended(s.endGame) && ended(newState.endGame)) {
-                onFinish(newState.endGame.solved)
+            if (!ended(oldGameState.endGame) && ended(newGameState.endGame)) {
+                onFinish({
+                    solved: newGameState.endGame.solved,
+                    elapsedTimeMillis: performance.now() - startTime
+                })
             }
-            return newState
+            return {
+                gameState: newGameState,
+                startTime
+            }
         })
     }
 
@@ -78,7 +100,7 @@ const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
         return () => clearInterval(timer)
     }, [])
 
-    useLayoutEffect(sendSize, [state.description])
+    useLayoutEffect(sendSize, [gameState.description])
 
     const onEvent = (e: MouseBoardEvent): void =>
         setState(s => updateState(s, e))
@@ -88,11 +110,11 @@ const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
 
     return (
         <GameComp
-            state={state}
+            state={gameState}
             onEvent={onEvent}
             onClickSmiley={onClickSmiley}
         />
     )
 }
 
-export { GameWithStateCompProps, GameWithStateComp }
+export { GameWithStateCompProps, GameWithStateComp, GameResult }
