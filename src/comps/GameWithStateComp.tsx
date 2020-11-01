@@ -15,7 +15,7 @@ import { GameComp } from './GameComp'
 
 interface GameWithStateCompProps {
     onInit(): void
-    onFinish(): void
+    onFinish(solved: boolean): void
 }
 
 function sendSize(): void {
@@ -43,7 +43,7 @@ const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
                 onInit()
             }
             if (!ended(s.endGame) && ended(newState.endGame)) {
-                onFinish()
+                onFinish(newState.endGame.solved)
             }
             return newState
         })

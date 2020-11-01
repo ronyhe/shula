@@ -57,10 +57,14 @@ const App: React.FunctionComponent<AppParams> = ({ mediaSourceId }) => {
     const onInit = () => {
         video.start()
     }
-    const onFinish = () => {
-        saveFile(video)
-            .then(() => console.log('done'))
-            .catch(e => console.error(e))
+    const onFinish = (solved: boolean) => {
+        if (solved) {
+            saveFile(video)
+                .then(() => console.log('done'))
+                .catch(e => console.error(e))
+        } else {
+            video.stop()
+        }
     }
     return <GameWithStateComp onInit={onInit} onFinish={onFinish} />
 }
