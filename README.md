@@ -24,7 +24,6 @@ Hebrew speakers refer to the game.
 ## Next steps
 - Add custom board sizes
 - Add stats
-- Add recordings and playback
 - Publish executables (cross platform builds are already setup using github actions)
 
 ## Acknowledgments
