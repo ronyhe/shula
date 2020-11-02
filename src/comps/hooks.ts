@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useEffect } from 'react'
+import { ipcRenderer } from 'electron'
 
 type ResourceState<A> = 'processing' | Error | A
 
@@ -13,4 +14,17 @@ function useResource<A>(fetchResource: () => Promise<A>): ResourceState<A> {
     return state
 }
 
-export { ResourceState, useResource }
+function useRendererCallback<A>(
+    eventName: string,
+    callback: (a: A) => void
+): void {
+    useEffect(() => {
+        const cb = (_e: unknown, arg: A) => callback(arg)
+        ipcRenderer.on(eventName, cb)
+        return () => {
+            ipcRenderer.off(eventName, cb)
+        }
+    }, [])
+}
+
+export { ResourceState, useResource, useRendererCallback }

@@ -11,6 +11,7 @@ import { useEffect, useLayoutEffect } from 'react'
 import { ipcRenderer } from 'electron'
 import { MouseBoardEvent } from '../logic/MouseBoard'
 import { GameComp } from './GameComp'
+import { useRendererCallback } from './hooks'
 
 interface GameResult {
     readonly solved: boolean
@@ -74,24 +75,13 @@ const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
         })
     }
 
-    useEffect(() => {
-        const cb = (_e: unknown, gameType: string) =>
-            setState(() => resetStateToGameType(gameType))
-        ipcRenderer.on('gameType', cb)
-        return () => {
-            ipcRenderer.off('gameType', cb)
-        }
-    }, [])
+    useRendererCallback<string>('gameType', gameType =>
+        setState(() => resetStateToGameType(gameType))
+    )
 
-    useEffect(() => {
-        const cb = () =>
-            setState(s => resetStateToDescription(s, s.description))
-
-        ipcRenderer.on('newGame', cb)
-        return () => {
-            ipcRenderer.off('newGame', cb)
-        }
-    }, [])
+    useRendererCallback<void>('newGame', () =>
+        setState(s => resetStateToDescription(s, s.description))
+    )
 
     useEffect(() => {
         const timer = setInterval(() => {
