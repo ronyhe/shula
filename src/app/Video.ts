@@ -31,7 +31,7 @@ class Video {
                 resolve(e.data)
             }
             mr.addEventListener('dataavailable', cb)
-            mr.stop()
+            setTimeout(() => mr.stop(), 500)
         })
     }
 
