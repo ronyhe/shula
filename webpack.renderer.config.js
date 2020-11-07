@@ -10,7 +10,11 @@ rules.push(
     {
         test: /\.png$/,
         use: {
-            loader: 'url-loader'
+            loader: 'file-loader',
+            options: {
+                name: '[name].[ext]',
+                outputPath: 'assets/'
+            }
         }
     }
 )
