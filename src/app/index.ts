@@ -11,6 +11,8 @@ if (require('electron-squirrel-startup')) {
 }
 
 const isMac: boolean = process.platform === 'darwin'
+const isWindows: boolean = process.platform === 'win32'
+const frameHeight: number = isWindows ? 19 : 0
 
 const size = {
     width: 498,
@@ -26,7 +28,7 @@ const createWindow = (): void => {
             enableRemoteModule: true
         },
         useContentSize: true,
-        frame: false,
+        frame: isWindows,
         resizable: false
     })
 
@@ -34,7 +36,7 @@ const createWindow = (): void => {
         if (size.width !== width || size.height !== height) {
             size.width = width
             size.height = height
-            win.setSize(width, height)
+            win.setSize(width, height + frameHeight)
         }
     })
 
