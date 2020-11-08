@@ -1,5 +1,4 @@
 import { app, BrowserWindow, Menu, ipcMain } from 'electron'
-import { createMenu } from './menu'
 import Store from 'electron-store'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: never
@@ -57,8 +56,7 @@ const createWindow = (): void => {
         win.webContents.openDevTools()
     }
 
-    const menu = createMenu({ win, app, isMac, store })
-    Menu.setApplicationMenu(menu)
+    Menu.setApplicationMenu(Menu.buildFromTemplate([]))
 }
 
 // This method will be called when Electron has finished
