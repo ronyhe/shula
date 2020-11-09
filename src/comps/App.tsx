@@ -49,6 +49,11 @@ const menu: Menu = [
             )
     },
     {
+        displayName: 'New Game',
+        keyCombo: null,
+        handler: () => appEvents.dispatchEvent(new Event('newGame'))
+    },
+    {
         displayName: 'Refresh',
         keyCombo: null,
         handler: () => {
