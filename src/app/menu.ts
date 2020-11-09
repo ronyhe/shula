@@ -1,20 +1,24 @@
-interface Key {
-    readonly char: string
+interface KeyCombo {
+    readonly text: string
     readonly ctrlOrCmd: boolean
 }
 
 interface MenuItem {
     readonly displayName: string
-    readonly key: Key
+    readonly keyCombo: KeyCombo
     handler(): void
 }
 
 type Menu = ReadonlyArray<MenuItem>
 
-function respond(isMac: boolean, e: KeyboardEvent, { key, handler }: MenuItem) {
+function respond(
+    isMac: boolean,
+    e: KeyboardEvent,
+    { keyCombo, handler }: MenuItem
+) {
     const modifier = isMac ? e.metaKey : e.ctrlKey
-    const modifierSatisfied = key.ctrlOrCmd ? modifier : false
-    if (e.key === key.char && modifierSatisfied) {
+    const modifierSatisfied = keyCombo.ctrlOrCmd ? modifier : false
+    if (e.key === keyCombo.text && modifierSatisfied) {
         handler()
     }
 }

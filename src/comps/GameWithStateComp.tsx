@@ -115,7 +115,7 @@ const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
                 items={[
                     {
                         displayName: 'option',
-                        key: { char: 'A', ctrlOrCmd: false },
+                        keyCombo: { text: 'A', ctrlOrCmd: false },
                         handler() {
                             console.log('option click')
                         }
