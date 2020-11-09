@@ -11,7 +11,7 @@ import { useEffect, useLayoutEffect } from 'react'
 import { ipcRenderer } from 'electron'
 import { MouseBoardEvent } from '../logic/MouseBoard'
 import { GameComp } from './GameComp'
-import { useRendererCallback } from './hooks'
+import { useEventTarget } from './hooks'
 
 interface GameResult {
     readonly solved: boolean
@@ -78,11 +78,11 @@ const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
         })
     }
 
-    useRendererCallback<string>('gameType', gameType =>
+    useEventTarget<string>(appEvents, 'gameType', gameType =>
         setState(() => resetStateToGameType(gameType))
     )
 
-    useRendererCallback<void>('newGame', () =>
+    useEventTarget<void>(appEvents, 'newGame', () =>
         setState(s => resetStateToDescription(s, s.description))
     )
 

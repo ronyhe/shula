@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { useEffect } from 'react'
-import { ipcRenderer } from 'electron'
 
 type ResourceState<A> = 'processing' | Error | A
 
@@ -14,17 +13,22 @@ function useResource<A>(fetchResource: () => Promise<A>): ResourceState<A> {
     return state
 }
 
-function useRendererCallback<A>(
+function useEventTarget<A>(
+    target: EventTarget,
     eventName: string,
     callback: (a: A) => void
 ): void {
     useEffect(() => {
-        const cb = (_e: unknown, arg: A) => callback(arg)
-        ipcRenderer.on(eventName, cb)
+        const cb = (e: CustomEvent<A>) => callback(e.detail)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        target.addEventListener(eventName, cb)
         return () => {
-            ipcRenderer.off(eventName, cb)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            target.removeEventListener(eventName, cb)
         }
     }, [])
 }
 
-export { ResourceState, useResource, useRendererCallback }
+export { ResourceState, useResource, useEventTarget }
