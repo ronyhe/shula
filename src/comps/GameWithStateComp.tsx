@@ -53,6 +53,7 @@ const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
         startTime: 0,
         gameState: resetStateToGameType(initialGameType)
     }))
+    const [showingMenu, setShowingMenu] = React.useState(false)
     const gameState = compState.gameState
 
     const setState = (f: (s: GameState) => GameState): void => {
@@ -103,8 +104,13 @@ const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
 
     return (
         <React.Fragment>
+            <div
+                className="menu-catch"
+                onMouseEnter={() => setShowingMenu(true)}
+            />
             <MenuComp
-                show={true}
+                onClose={() => setShowingMenu(false)}
+                show={showingMenu}
                 isMac={isMac}
                 items={[
                     {
