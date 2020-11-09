@@ -61,17 +61,13 @@ body {
   align-items: center;
 }
 
+/* Ripple effect taken from https://codepen.io/finnhvman/pen/jLXKJw */
 .ripple {
   background-position: center;
   transition: background 0.8s;
 }
 .ripple:hover {
   background: whitesmoke radial-gradient(circle, transparent 1%, whitesmoke 1%) center/15000%;
-}
-.ripple:active {
-  background-color: white;
-  background-size: 100%;
-  transition: background 0s;
 }
 
 .menu-item-key-combo {
