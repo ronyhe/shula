@@ -2,6 +2,7 @@ import * as React from 'react'
 import { GameResult, GameWithStateComp } from './GameWithStateComp'
 import { useResource } from './hooks'
 import { Video, getMediaStream, saveFile } from '../app/Video'
+import { MenuComp } from './MenuComp'
 
 interface AppParams {
     readonly mediaSourceId: string
@@ -24,6 +25,7 @@ const App: React.FunctionComponent<AppParams> = ({
     initialGameType,
     isMac
 }) => {
+    const [showingMenu, setShowingMenu] = React.useState(false)
     const stream = useResource(() => getMediaStream(mediaSourceId))
     if (stream === 'processing') {
         return <div>Loading...</div>
@@ -43,12 +45,32 @@ const App: React.FunctionComponent<AppParams> = ({
         })
     }
     return (
-        <GameWithStateComp
-            isMac={isMac}
-            onInit={onInit}
-            onFinish={onFinish}
-            initialGameType={initialGameType}
-        />
+        <React.Fragment>
+            <div
+                className="menu-catch"
+                onMouseEnter={() => setShowingMenu(true)}
+            />
+            <MenuComp
+                onClose={() => setShowingMenu(false)}
+                show={showingMenu}
+                isMac={isMac}
+                items={[
+                    {
+                        displayName: 'option',
+                        keyCombo: { text: 'A', ctrlOrCmd: false },
+                        handler() {
+                            console.log('option click')
+                        }
+                    }
+                ]}
+            />
+            <GameWithStateComp
+                isMac={isMac}
+                onInit={onInit}
+                onFinish={onFinish}
+                initialGameType={initialGameType}
+            />
+        </React.Fragment>
     )
 }
 

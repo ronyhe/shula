@@ -12,7 +12,6 @@ import { ipcRenderer } from 'electron'
 import { MouseBoardEvent } from '../logic/MouseBoard'
 import { GameComp } from './GameComp'
 import { useRendererCallback } from './hooks'
-import { MenuComp } from './MenuComp'
 
 interface GameResult {
     readonly solved: boolean
@@ -46,14 +45,12 @@ interface CompState {
 const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
     onInit,
     onFinish,
-    initialGameType,
-    isMac
+    initialGameType
 }) => {
     const [compState, setCompState] = React.useState<CompState>(() => ({
         startTime: 0,
         gameState: resetStateToGameType(initialGameType)
     }))
-    const [showingMenu, setShowingMenu] = React.useState(false)
     const gameState = compState.gameState
 
     const setState = (f: (s: GameState) => GameState): void => {
@@ -103,31 +100,11 @@ const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
         setState(s => resetStateToDescription(s, s.description))
 
     return (
-        <React.Fragment>
-            <div
-                className="menu-catch"
-                onMouseEnter={() => setShowingMenu(true)}
-            />
-            <MenuComp
-                onClose={() => setShowingMenu(false)}
-                show={showingMenu}
-                isMac={isMac}
-                items={[
-                    {
-                        displayName: 'option',
-                        keyCombo: { text: 'A', ctrlOrCmd: false },
-                        handler() {
-                            console.log('option click')
-                        }
-                    }
-                ]}
-            />
-            <GameComp
-                state={gameState}
-                onEvent={onEvent}
-                onClickSmiley={onClickSmiley}
-            />
-        </React.Fragment>
+        <GameComp
+            state={gameState}
+            onEvent={onEvent}
+            onClickSmiley={onClickSmiley}
+        />
     )
 }
 
