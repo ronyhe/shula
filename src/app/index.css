@@ -49,6 +49,7 @@ body {
   padding-left: 15px;
   padding-top: 15px;
   background-color: pink;
+  user-select: none;
 }
 
 .menu-catch {

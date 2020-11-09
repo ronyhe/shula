@@ -21,6 +21,7 @@ interface GameResult {
 interface GameWithStateCompProps {
     readonly initialGameType: string
     readonly isMac: boolean
+    readonly appEvents: EventTarget
     onInit(): void
     onFinish(gameResult: GameResult): void
 }
@@ -45,7 +46,8 @@ interface CompState {
 const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
     onInit,
     onFinish,
-    initialGameType
+    initialGameType,
+    appEvents
 }) => {
     const [compState, setCompState] = React.useState<CompState>(() => ({
         startTime: 0,

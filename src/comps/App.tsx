@@ -3,6 +3,7 @@ import { GameResult, GameWithStateComp } from './GameWithStateComp'
 import { useResource } from './hooks'
 import { Video, getMediaStream, saveFile } from '../app/Video'
 import { MenuComp } from './MenuComp'
+import { Menu } from '../app/menu'
 
 interface AppParams {
     readonly mediaSourceId: string
@@ -19,6 +20,56 @@ async function stopVideoAndSaveFile(
         await saveFile(blob, gameResult.elapsedTimeMillis)
     }
 }
+
+const appEvents = new EventTarget()
+
+const menu: Menu = [
+    {
+        displayName: 'Beginner',
+        keyCombo: null,
+        handler: () =>
+            appEvents.dispatchEvent(
+                new CustomEvent('gameType', { detail: 'beginner' })
+            )
+    },
+    {
+        displayName: 'Intermediate',
+        keyCombo: null,
+        handler: () =>
+            appEvents.dispatchEvent(
+                new CustomEvent('gameType', { detail: 'intermediate' })
+            )
+    },
+    {
+        displayName: 'Expert',
+        keyCombo: null,
+        handler: () =>
+            appEvents.dispatchEvent(
+                new CustomEvent('gameType', { detail: 'expert' })
+            )
+    },
+    {
+        displayName: 'Refresh',
+        keyCombo: null,
+        handler: () => {
+            console.log('refresh')
+        }
+    },
+    {
+        displayName: 'Open DevTools',
+        keyCombo: null,
+        handler: () => {
+            console.log('dev tools')
+        }
+    },
+    {
+        displayName: 'Quit',
+        keyCombo: null,
+        handler: () => {
+            console.log('quit')
+        }
+    }
+]
 
 const App: React.FunctionComponent<AppParams> = ({
     mediaSourceId,
@@ -54,17 +105,10 @@ const App: React.FunctionComponent<AppParams> = ({
                 onClose={() => setShowingMenu(false)}
                 show={showingMenu}
                 isMac={isMac}
-                items={[
-                    {
-                        displayName: 'option',
-                        keyCombo: { text: 'A', ctrlOrCmd: false },
-                        handler() {
-                            console.log('option click')
-                        }
-                    }
-                ]}
+                items={menu}
             />
             <GameWithStateComp
+                appEvents={appEvents}
                 isMac={isMac}
                 onInit={onInit}
                 onFinish={onFinish}
