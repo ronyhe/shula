@@ -19,13 +19,10 @@ function useEventTarget<A>(
     callback: (a: A) => void
 ): void {
     useEffect(() => {
-        const cb = (e: CustomEvent<A>) => callback(e.detail)
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        const cb: EventListener = ((e: CustomEvent<A>) =>
+            callback(e.detail)) as EventListener
         target.addEventListener(eventName, cb)
         return () => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             target.removeEventListener(eventName, cb)
         }
     }, [])
