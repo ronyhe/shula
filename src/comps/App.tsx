@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { remote, ipcRenderer } from 'electron'
 import { GameResult, GameWithStateComp } from './GameWithStateComp'
 import { useResource } from './hooks'
 import { Video, getMediaStream, saveFile } from '../app/Video'
@@ -59,23 +60,29 @@ const menu: Menu = [
     },
     {
         displayName: 'Refresh',
-        keyCombo: null,
+        keyCombo: {
+            text: 'r',
+            ctrlOrCmd: true
+        },
         handler: () => {
-            console.log('refresh')
+            remote.getCurrentWindow().reload()
         }
     },
     {
         displayName: 'Open DevTools',
         keyCombo: null,
         handler: () => {
-            console.log('dev tools')
+            remote.getCurrentWindow().webContents.openDevTools()
         }
     },
     {
         displayName: 'Quit',
-        keyCombo: null,
+        keyCombo: {
+            text: 'q',
+            ctrlOrCmd: true
+        },
         handler: () => {
-            console.log('quit')
+            ipcRenderer.send('quit')
         }
     }
 ]

@@ -37,6 +37,10 @@ const createWindow = (): void => {
         }
     })
 
+    ipcMain.on('quit', () => {
+        app.quit()
+    })
+
     const store = new Store<Record<string, string>>()
     const gameType = store.get('gameType')
     const url = new URL(MAIN_WINDOW_WEBPACK_ENTRY)
