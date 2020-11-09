@@ -12,6 +12,7 @@ import { ipcRenderer } from 'electron'
 import { MouseBoardEvent } from '../logic/MouseBoard'
 import { GameComp } from './GameComp'
 import { useRendererCallback } from './hooks'
+import { MenuComp } from './MenuComp'
 
 interface GameResult {
     readonly solved: boolean
@@ -99,11 +100,25 @@ const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
         setState(s => resetStateToDescription(s, s.description))
 
     return (
-        <GameComp
-            state={gameState}
-            onEvent={onEvent}
-            onClickSmiley={onClickSmiley}
-        />
+        <React.Fragment>
+            <MenuComp
+                show={true}
+                items={[
+                    {
+                        displayName: 'option',
+                        key: { char: 'A', ctrlOrCmd: false },
+                        handler() {
+                            console.log('option click')
+                        }
+                    }
+                ]}
+            />
+            <GameComp
+                state={gameState}
+                onEvent={onEvent}
+                onClickSmiley={onClickSmiley}
+            />
+        </React.Fragment>
     )
 }
 
