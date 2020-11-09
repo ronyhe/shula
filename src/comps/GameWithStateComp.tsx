@@ -21,6 +21,7 @@ interface GameResult {
 
 interface GameWithStateCompProps {
     readonly initialGameType: string
+    readonly isMac: boolean
     onInit(): void
     onFinish(gameResult: GameResult): void
 }
@@ -45,7 +46,8 @@ interface CompState {
 const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
     onInit,
     onFinish,
-    initialGameType
+    initialGameType,
+    isMac
 }) => {
     const [compState, setCompState] = React.useState<CompState>(() => ({
         startTime: 0,
@@ -103,6 +105,7 @@ const GameWithStateComp: React.FunctionComponent<GameWithStateCompProps> = ({
         <React.Fragment>
             <MenuComp
                 show={true}
+                isMac={isMac}
                 items={[
                     {
                         displayName: 'option',

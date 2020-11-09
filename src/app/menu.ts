@@ -23,9 +23,9 @@ function registerKeyListeners(isMac: boolean, menu: Menu): () => void {
     const cb = (e: KeyboardEvent) => {
         menu.forEach(item => respond(isMac, e, item))
     }
-    document.addEventListener('keyup', cb)
+    document.addEventListener('keydown', cb)
     return () => {
-        document.removeEventListener('keyup', cb)
+        document.removeEventListener('keydown', cb)
     }
 }
 

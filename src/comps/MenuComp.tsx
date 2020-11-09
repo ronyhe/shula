@@ -2,8 +2,9 @@ import * as React from 'react'
 import { Menu, MenuItem } from '../app/menu'
 
 interface MenuCompProps {
-    readonly show: boolean
     readonly items: Menu
+    readonly isMac: boolean
+    readonly show: boolean
 }
 
 interface MenuItemCompProps {
@@ -18,7 +19,7 @@ const MenuItemComp: React.FunctionComponent<MenuItemCompProps> = ({ item }) => {
     )
 }
 
-const MenuComp: React.FunctionComponent<MenuCompProps> = ({ items, show }) => {
+const MenuComp: React.FunctionComponent<MenuCompProps> = ({ show, items }) => {
     if (!show) {
         return null
     }

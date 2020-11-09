@@ -6,6 +6,7 @@ import { Video, getMediaStream, saveFile } from '../app/Video'
 interface AppParams {
     readonly mediaSourceId: string
     readonly initialGameType: string
+    readonly isMac: boolean
 }
 
 async function stopVideoAndSaveFile(
@@ -20,7 +21,8 @@ async function stopVideoAndSaveFile(
 
 const App: React.FunctionComponent<AppParams> = ({
     mediaSourceId,
-    initialGameType
+    initialGameType,
+    isMac
 }) => {
     const stream = useResource(() => getMediaStream(mediaSourceId))
     if (stream === 'processing') {
@@ -42,6 +44,7 @@ const App: React.FunctionComponent<AppParams> = ({
     }
     return (
         <GameWithStateComp
+            isMac={isMac}
             onInit={onInit}
             onFinish={onFinish}
             initialGameType={initialGameType}

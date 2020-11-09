@@ -9,8 +9,13 @@ if (mediaSourceId === null) {
     throw new Error('MediaSourceId was not passed to the renderer process')
 }
 const initialGameType = params.get('gameType') ?? 'expert'
+const isMac = params.get('isMac') === 'true'
 
 ReactDOM.render(
-    <App mediaSourceId={mediaSourceId} initialGameType={initialGameType} />,
+    <App
+        mediaSourceId={mediaSourceId}
+        initialGameType={initialGameType}
+        isMac={isMac}
+    />,
     document.getElementById('root')
 )

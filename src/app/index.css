@@ -44,6 +44,12 @@ body {
   display: inline-block;
 }
 
+.menu {
+  position: absolute;
+  margin-left: 15px;
+  margin-top: 15px;
+}
+
 .game {
   display: inline-block;
   background-color: #C0C0C0;

@@ -43,6 +43,7 @@ const createWindow = (): void => {
     const gameType = store.get('gameType')
     const url = new URL(MAIN_WINDOW_WEBPACK_ENTRY)
     url.searchParams.append('mediaSourceId', win.getMediaSourceId())
+    url.searchParams.append('isMac', isMac ? 'true' : 'false')
     if (gameType) {
         url.searchParams.append('gameType', gameType)
     }
