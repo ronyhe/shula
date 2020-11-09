@@ -38,4 +38,4 @@ function registerKeyCombos(
     return () => document.removeEventListener('keydown', cb)
 }
 
-export { Menu, MenuItem, registerKeyCombos }
+export { Menu, MenuItem, KeyCombo, registerKeyCombos }

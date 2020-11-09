@@ -46,17 +46,28 @@ body {
 
 .menu {
   position: absolute;
-  padding-left: 15px;
-  padding-top: 15px;
-  background-color: pink;
+  padding: 5px;
   user-select: none;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.menu-item {
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+  align-items: center;
+}
+
+.menu-item-key-combo {
+  font-size: 10px;
 }
 
 .menu-catch {
   position: absolute;
   height: 15px;
   width: 15px;
-  background-color: aquamarine;
 }
 
 .game {
