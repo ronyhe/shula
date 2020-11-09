@@ -49,7 +49,8 @@ body {
   padding: 5px;
   user-select: none;
   border-radius: 4px;
-  background-color: white;
+  background-color: silver;
+  cursor: pointer;
 }
 
 .menu-item {
@@ -58,6 +59,19 @@ body {
   justify-content: space-between;
   margin-top: 2px;
   align-items: center;
+}
+
+.ripple {
+  background-position: center;
+  transition: background 0.8s;
+}
+.ripple:hover {
+  background: whitesmoke radial-gradient(circle, transparent 1%, whitesmoke 1%) center/15000%;
+}
+.ripple:active {
+  background-color: white;
+  background-size: 100%;
+  transition: background 0s;
 }
 
 .menu-item-key-combo {

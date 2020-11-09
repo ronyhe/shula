@@ -41,7 +41,7 @@ const MenuItemComp: React.FunctionComponent<MenuItemCompProps> = ({
         </div>
     ) : null
     return (
-        <div className="menu-item" onClick={onClick}>
+        <div className="menu-item ripple" onClick={onClick}>
             <div className="menu-item-display-name">{item.displayName}</div>
             {textDiv}
         </div>
