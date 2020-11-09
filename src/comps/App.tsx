@@ -3,7 +3,8 @@ import { GameResult, GameWithStateComp } from './GameWithStateComp'
 import { useResource } from './hooks'
 import { Video, getMediaStream, saveFile } from '../app/Video'
 import { MenuComp } from './MenuComp'
-import { Menu } from '../app/menu'
+import { Menu, registerKeyCombos } from '../app/menu'
+import { useEffect } from 'react'
 
 interface AppParams {
     readonly mediaSourceId: string
@@ -50,7 +51,10 @@ const menu: Menu = [
     },
     {
         displayName: 'New Game',
-        keyCombo: null,
+        keyCombo: {
+            text: 'F2',
+            ctrlOrCmd: false
+        },
         handler: () => appEvents.dispatchEvent(new Event('newGame'))
     },
     {
@@ -82,6 +86,10 @@ const App: React.FunctionComponent<AppParams> = ({
     isMac
 }) => {
     const [showingMenu, setShowingMenu] = React.useState(false)
+    useEffect(
+        () => registerKeyCombos(isMac, menu, () => setShowingMenu(false)),
+        []
+    )
     const stream = useResource(() => getMediaStream(mediaSourceId))
     if (stream === 'processing') {
         return <div>Loading...</div>
