@@ -50,7 +50,6 @@ body {
   user-select: none;
   border-radius: 4px;
   background-color: silver;
-  cursor: pointer;
 }
 
 .menu-item {
@@ -59,6 +58,7 @@ body {
   justify-content: space-between;
   margin-top: 2px;
   align-items: center;
+  border-radius: 2px;
 }
 
 /* Ripple effect taken from https://codepen.io/finnhvman/pen/jLXKJw */
