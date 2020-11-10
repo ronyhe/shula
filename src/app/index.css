@@ -42,6 +42,7 @@ body {
   margin: 0;
   padding: 0;
   display: inline-block;
+  overflow: hidden;
 }
 
 .menu {
@@ -50,6 +51,7 @@ body {
   user-select: none;
   border-radius: 4px;
   background-color: silver;
+  height: 100%;
 }
 
 .menu-item {
@@ -59,6 +61,10 @@ body {
   margin-top: 2px;
   align-items: center;
   border-radius: 2px;
+}
+
+.menu-items-wrapper {
+  padding-top: 42px;
 }
 
 /* Ripple effect taken from https://codepen.io/finnhvman/pen/jLXKJw */
@@ -76,8 +82,8 @@ body {
 
 .menu-catch {
   position: absolute;
-  height: 15px;
-  width: 15px;
+  width: 6px;
+  height: 100%
 }
 
 .game {

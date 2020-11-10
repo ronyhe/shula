@@ -59,14 +59,16 @@ const MenuComp: React.FunctionComponent<MenuCompProps> = ({
     }
     return (
         <div className="menu" onMouseLeave={onClose}>
-            {items.map(item => (
-                <MenuItemComp
-                    isMac={isMac}
-                    item={item}
-                    key={item.displayName}
-                    onClose={onClose}
-                />
-            ))}
+            <div className="menu-items-wrapper">
+                {items.map(item => (
+                    <MenuItemComp
+                        isMac={isMac}
+                        item={item}
+                        key={item.displayName}
+                        onClose={onClose}
+                    />
+                ))}
+            </div>
         </div>
     )
 }
