@@ -1,16 +1,15 @@
 import * as React from 'react'
 import { remote, ipcRenderer } from 'electron'
 import { GameResult, GameWithStateComp } from './GameWithStateComp'
-import { useResource } from './hooks'
-import { Video, getMediaStream, saveFile } from '../app/Video'
+import { Video, saveFile } from '../app/Video'
 import { MenuComp } from './MenuComp'
 import { Menu, registerKeyCombos } from '../app/menu'
 import { useEffect } from 'react'
 
 interface AppParams {
-    readonly mediaSourceId: string
     readonly initialGameType: string
     readonly isMac: boolean
+    readonly video: Video
 }
 
 async function stopVideoAndSaveFile(
@@ -88,24 +87,15 @@ const menu: Menu = [
 ]
 
 const App: React.FunctionComponent<AppParams> = ({
-    mediaSourceId,
     initialGameType,
-    isMac
+    isMac,
+    video
 }) => {
     const [showingMenu, setShowingMenu] = React.useState(false)
     useEffect(
         () => registerKeyCombos(isMac, menu, () => setShowingMenu(false)),
         []
     )
-    const stream = useResource(() => getMediaStream(mediaSourceId))
-    if (stream === 'processing') {
-        return <div>Loading...</div>
-    }
-    if (stream instanceof Error) {
-        return <div>{`Error: ${stream.message}`}</div>
-    }
-    const video = new Video(stream)
-
     const onInit = () => {
         video.start()
     }
