@@ -16,9 +16,10 @@ if (mediaSourceId === null) {
 const initialGameType = params.get('gameType') ?? 'expert'
 const isMac = params.get('isMac') === 'true'
 
-getMediaStream(mediaSourceId)
-    .then(stream => new Video(stream))
-    .then(video =>
+async function main() {
+    try {
+        const stream = await getMediaStream(mediaSourceId as string)
+        const video = new Video(stream)
         render(
             <App
                 initialGameType={initialGameType}
@@ -26,10 +27,10 @@ getMediaStream(mediaSourceId)
                 video={video}
             />
         )
-    )
-    .catch(error => {
-        console.error(error)
-        render(
-            <div>{`Cannot start app, error occurred: ${error.message}`}</div>
-        )
-    })
+    } catch (e) {
+        console.error(e)
+        render(<div>{`Cannot start app, error occurred: ${e.message}`}</div>)
+    }
+}
+
+main()
