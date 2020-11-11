@@ -4,6 +4,10 @@ import ReactDOM from 'react-dom'
 import App from '../comps/App'
 import { getMediaStream, Video } from './Video'
 
+function render(comp: JSX.Element): void {
+    ReactDOM.render(comp, document.getElementById('root'))
+}
+
 const params = new URLSearchParams(window.location.search)
 const mediaSourceId = params.get('mediaSourceId')
 if (mediaSourceId === null) {
@@ -14,20 +18,18 @@ const isMac = params.get('isMac') === 'true'
 
 getMediaStream(mediaSourceId)
     .then(stream => new Video(stream))
-    .then(video => {
-        ReactDOM.render(
+    .then(video =>
+        render(
             <App
                 initialGameType={initialGameType}
                 isMac={isMac}
                 video={video}
-            />,
-            document.getElementById('root')
+            />
         )
-    })
+    )
     .catch(error => {
         console.error(error)
-        ReactDOM.render(
-            <div>{`Cannot start app, error occurred: ${error.message}`}</div>,
-            document.getElementById('root')
+        render(
+            <div>{`Cannot start app, error occurred: ${error.message}`}</div>
         )
     })
