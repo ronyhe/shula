@@ -27,7 +27,7 @@ getMediaStream(mediaSourceId)
     .catch(error => {
         console.error(error)
         ReactDOM.render(
-            <div>{`Cannot start app, error occured: ${error.message}`}</div>,
+            <div>{`Cannot start app, error occurred: ${error.message}`}</div>,
             document.getElementById('root')
         )
     })
